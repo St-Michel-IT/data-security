@@ -1,0 +1,398 @@
+\documentclass{beamer}
+\RequirePackage{luatex85}
+\include{../style/cours-style.sty}
+
+% Title
+\title{Data Security - Bachelor CSI}
+\author{Christophe Brun}
+\institute{Campus Saint-Michel IT}
+\date{25 juin 2024}
+\beamertemplatenavigationsymbolsempty
+
+\titlegraphic{
+    \bigbreak
+    \includegraphics[width=2cm]{image/logo-papit}
+    \includegraphics[width=2cm]{image/logo-campus-saint-michel-it}
+}
+\begin{document}
+
+    \begin{frame}
+        \transdissolve
+        \titlepage
+    \end{frame}
+
+    \begin{frame}{Table des matières}
+        \tableofcontents
+    \end{frame}
+
+
+    \section{Programme du module}\label{sec:programme-du-module}
+    \begin{frame}
+        \frametitle{Data Security}
+        \framesubtitle{Compétences}
+        \transdissolve
+        \begin{itemize}
+            \item Connaître et comprendre les vecteurs d'attaques sur la donnée.
+            \item Connaître les moyens de remédiation aux attaques.
+            \item Comprendre l'enjeu de la sécurité de la donnée.
+        \end{itemize}
+    \end{frame}
+
+
+    \section{Les vecteurs d'attaque}\label{sec:les-vecteurs-dattaque}
+
+    \subsection{Le buffer overflow}\label{subsec:les-buffer-overflow}
+    \begin{frame}[fragile]
+        \frametitle{Buffer Overflow}
+        \framesubtitle{Example de Stack-Based Buffer Overflow\footnote{\label{hacking}Hacking, The art of exploitation, Jon Erickson, 2nd edition}}
+        \transdissolve
+        Le programme \lstinline{auth-overflow.c} est un programme en C qui vérifie un mot de passe et est vulnérable à un buffer overflow~:
+        % C listing
+        \begin{lstlisting}[language=C,basicstyle=\tiny\ttfamily]
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int check_authentication(char *password) {
+    char password_buffer[16];
+    int auth_flag = 0;
+    strcpy(password_buffer, password); // Not so safe at all
+    if (strcmp(password_buffer, "brillig") == 0)
+        auth_flag = 1;
+    if (strcmp(password_buffer, "outgrabe") == 0)
+        auth_flag = 1;
+    return auth_flag;
+}
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        printf("Usage: %s <password>\n", argv[0]);
+        exit(0);
+    }
+    if (check_authentication(argv[1])) {
+        printf("Access Granted.\n");
+    } else {
+        printf("Access Denied.\n");
+    }
+}
+        \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \frametitle{Buffer Overflow}
+        \framesubtitle{Définition}
+        \transdissolve
+        \begin{footnotesize}
+            Le débordement de tampon désigne une anomalie qui se produit lorsqu'un logiciel écrit des données dans une mémoire tampon jusqu'à surcharger la capacité de cette dernière, entraînant ainsi l'écrasement des emplacements de mémoire adjacents.
+
+            En d'autres termes, un trop grand nombre d'informations sont transmises dans un conteneur ne disposant pas de suffisamment d'espace et ces dernières finissent par remplacer les données situées dans les conteneurs adjacents.
+            \begin{columns}
+                \begin{column}{0.7\textwidth}
+                    Les pirates peuvent tirer parti du débordement de tampon pour modifier la mémoire d'un ordinateur afin de perturber l'exécution d'un programme ou d'en prendre le contrôle\footnotemark.
+                    \bigbreak
+                    Aux États-Unis, le sujet est pris en main par la Maison Blanche qui donne chaque année ses recommandations sur la gestion de la mémoire dans le développement logiciel\footnotemark.
+                \end{column}
+                \begin{column}{0.3\textwidth}
+                    \includegraphics[width=3cm]{image/old-senile-at-white-house}
+                \end{column}
+            \end{columns}
+            \footnotetext{Statements of Support for Software Measurability and Memory Safety, \url{https://www.whitehouse.gov/oncd/briefing-room/2024/02/26/memory-safety-statements-of-support/}}
+            \footnotetext{Qu'est-ce que le débordement de tampon (buffer overflow)~?, \url{https://www.cloudflare.com/fr-fr/learning/security/threats/buffer-overflow/}}
+        \end{footnotesize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \frametitle{Buffer Overflow}
+        \framesubtitle{Example de Stack-Based Buffer Overflow\cref{hacking}}
+        \transdissolve
+        % C listing
+        \begin{lstlisting}[language=bash]
+$ gcc auth-overflow.c -o auth-overflow
+$ ./auth-overflow brillig
+Access Granted.
+$ ./auth-overflow $(python3 -c "print('A'*2)")
+Access Denied.
+$ ./auth-overflow $(python3 -c "print('A'*24)")
+Access Denied.
+$ ./auth-overflow $(python3 -c "print('A'*25)")
+*** stack smashing detected ***: terminated
+Abandon (core dumped)
+        \end{lstlisting}
+        Expliquer ce qui se passe dans ces cas~?
+        \pause
+        \bigbreak
+        \lstinline{stack smashing detected} veut dire que GCC à détecter un buffer overflow et fait crasher le programme de manière préventive.
+        Il parle de la stack, car c'est dans cette mémoire que les variables locales sont stockées.
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \frametitle{Buffer Overflow}
+        \framesubtitle{Example de Stack-Based Buffer Overflow\cref{hacking}}
+        \transdissolve
+        \begin{lstlisting}[language=bash]
+$ gcc auth-overflow.c -fno-stack-protector -o auth-overflow
+$ ./auth-overflow $(python3 -c "print('A'*25)")
+Access Denied.
+$ ./auth-overflow $(python3 -c "print('A'*266)")
+Erreur de segmentation (core dumped)
+$ ./auth-overflow $(python3 -c "print('A'*30)")
+Access Granted.
+        \end{lstlisting}
+        \bigbreak
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                Si on désactive cette protection avec l'option \lstinline{-fno-stack-protector}.
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \includegraphics[width=4cm]{image/programmer-head-exploding}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \frametitle{Buffer Overflow}
+        \framesubtitle{Example de Stack-Based Buffer Overflow: remédiation possible}
+        \transdissolve
+        Une approche du type defensive programming consiste à limiter la taille du buffer.
+        Exemple avec \lstinline{auth-overflow-size-constraint.c}~:
+        % C listing
+        \begin{lstlisting}[language=C,basicstyle=\tiny\ttfamily]
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int check_authentication(char *password) {
+    int buffer_size = 16;
+    char password_buffer[buffer_size];
+    int auth_flag = 0;
+    strncpy(password_buffer, password, buffer_size); // Not so safe but better
+    if (strcmp(password_buffer, "brillig") == 0)
+        auth_flag = 1;
+    if (strcmp(password_buffer, "outgrabe") == 0)
+        auth_flag = 1;
+    return auth_flag;
+}
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        printf("Usage: %s <password>\n", argv[0]);
+        exit(0);
+    }
+    if (check_authentication(argv[1])) {
+        printf("Access Granted.\n");
+    } else {
+        printf("Access Denied.\n");
+    }
+}
+        \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \frametitle{Buffer Overflow}
+        \framesubtitle{Example de Stack-Based Buffer Overflow: remédiation possible}
+        \transdissolve
+        % C listing
+        \begin{lstlisting}[language=bash]
+$ gcc auth-overflow-size-constraint.c -o auth-overflow-size-constraint
+$ ./auth-overflow-size-constraint $(python3 -c "print('A'*30)")
+Access Denied.
+$ ./auth-overflow-size-constraint $(python3 -c "print('A'*300)")
+Access Denied.
+$ ./auth-overflow-size-constraint "brillig"
+Access Granted.
+        \end{lstlisting}
+        Expliquer ce qui se passe dans ces cas~?
+        \pause
+        \bigbreak
+        Contrairement à \lstinline{strcpy}, \lstinline{strncpy} \textit{Copy no more than N characters of SRC to DEST}~.
+        \bigbreak
+        On peut en plus isoler dans un Docker ou un chroot, en cas de RCE, elle sera isolée.
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Buffer Overflow}
+        \framesubtitle{Exercices}
+        \transdissolve
+        Les exercices sont notés pour ceux qui passent y répondre au tableau.
+        \bigbreak
+        Exercice \execcounterdispinc{}~:
+        Étudier les guidelines de la Maison Blanche sur la gestion de la mémoire dans le développement logiciel.
+        \bigbreak
+        Comprendre et lister ce qui est déconseillé et ce qui conseillé et pourquoi.
+        \transdissolve
+        Exercice \execcounterdispinc{}~:
+        Comment Java prévient les buffers overflow~?
+        \bigbreak
+        Exercice \execcounterdispinc{}~:
+        Comment Rust prévient les buffers overflow~?
+    \end{frame}
+
+    \subsection{Supply chain attack}\label{subsec:supply-chain-attack}
+    \begin{frame}
+        \frametitle{Supply chain attack}
+        \framesubtitle{Définition\footnote{Attaques de la chaîne d’approvisionnement~: Exemples et contre-mesures, \url{https://www.fortinet.com/fr/resources/cyberglossary/supply-chain-attacks}}}
+        \transdissolve
+        Attaque de la chaîne d'approvisionnement en français.
+        \bigbreak
+        Une attaque de la chaîne d’approvisionnement fait référence au fait que quelqu’un utilise un fournisseur ou un partenaire externe qui a accès à vos données et systèmes pour infiltrer votre infrastructure numérique.
+        Étant donné que la partie extérieure a obtenu le droit d’utiliser et de manipuler des zones de votre réseau, vos applications ou des données sensibles, l’attaquant doit uniquement pénétrer dans les défenses du tiers ou programmer une faille dans une solution proposée par un fournisseur pour infiltrer votre système.
+        \bigbreak
+        Possible entre logiciels propriétaires et logiciels open source.
+        Mais plus connu dans l'open source, qui peut par la suite aller dans le propriétaire.
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Supply chain attack}
+        \framesubtitle{Comparaison des écosystèmes\footnote{\label{snyk}The state of open source security report, \url{https://res.cloudinary.com/snyk/image/upload/v1551172581/The-State-Of-Open-Source-Security-Report-2019-Snyk.pdf}}}
+        \transdissolve
+        \centering
+        \includegraphics[width=9cm]{image/vuln-direct-indirect-dependencies}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Supply chain attack}
+        \framesubtitle{Comparaison des écosystèmes\cref{snyk}}
+        \transdissolve
+        \centering
+        \includegraphics[width=9cm]{image/vuln-created}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Supply chain attack}
+        \framesubtitle{Vulnérabilités ignorées par les écosystèmes\footnote{\label{snyk2023}2023 State of Open Source Security Report 2019, \url{https://go.snyk.io/state-of-open-source-security-report-2023-dwn-typ.html}}}
+        \transdissolve
+        \centering
+        \begin{columns}
+            \column{0.4\textwidth}
+            \includegraphics[width=4cm]{image/vuln-by-ecosystem}
+            \column{0.6\textwidth}
+            JavaScript et Java sont toujours les bons derniers en 2023\ldots
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Supply chain attack}
+        \framesubtitle{Remédiations~: Ne pas \textquote{tirer} n'importequelle dépendance}
+        \transdissolve
+        Les usages de certains packages NPM posent questions~:
+        \begin{itemize}
+            \item \href{https://www.npmjs.com/package/is-number}{\lstinline{is-number}}~: 69 M téléchargements par semaine.
+            \item \href{https://www.npmjs.com/package/is-odd}{\lstinline{is-odd}}~: 290 K téléchargements par semaine.
+            \item \href{https://www.npmjs.com/package/is-even}{\lstinline{is-even}}~: 131 K téléchargements par semaine.
+        \end{itemize}
+        A-t-on vraiment besoin de ces packages~?
+        \bigbreak
+        \centering
+        \includegraphics[width=10cm]{image/ai-everywhere}
+        \flushleft
+        \bigbreak
+        A-t-on vraiment besoin d'IA~?
+        \bigbreak
+        IMHO c'est sans aucun doute un \textit{scam} \emoji{exploding-head}.
+        A minima un \textit{scam} intellectuel et mathématique.
+        \begin{dangercolorbox}
+            Estimer le bénéfice/risque (de supply chain attack) de l'usage de ces packages.
+        \end{dangercolorbox}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Supply chain attack}
+        \framesubtitle{Remédiations~: Les outils de scanning\cref{snyk2023}}
+        \transdissolve
+        Diminution globale peut-être dû aux outils de scanning, SonarQube, CodeQL, Docker Desktop, NPM, etc.
+        \bigbreak
+        \centering
+        \includegraphics[width=10cm]{image/vuln-time-to-fix}
+        \flushleft
+        \begin{dangercolorbox}
+            Lire les résultats des outils de scanning et se mettre en action.
+        \end{dangercolorbox}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Supply chain attack}
+        \framesubtitle{Exercice}
+        Exercice \execcounterdispinc{}~:
+        Vous êtes admin système et vous maintenez un pool de scripts Python qui automisent des tâches avec l'API Azure.
+        \bigbreak
+        Trouvez un outil qui scanne vos scripts et les dépendances de ces derniers pour détecter des vulnérabilités potentielles.
+
+        L'outil doit présenter un rapport clair et précis des vulnérabilités détectées.
+        \bigbreak
+        Testez l'outil sur un script de votre choix et présentez le rapport.
+    \end{frame}
+
+    \subsection{Path Traversal}\label{path-traversal}
+
+
+    \begin{frame}
+        \frametitle{Path Traversal}
+        \framesubtitle{définition\footnote{Path Traversal\url{https://owasp.org/www-community/attacks/Path_Traversal}}}
+        \transdissolve
+        Cette attaque vise à accéder à des fichiers et répertoires qui sont stockés en dehors du dossier racine du site web ou censé être hors des droits de l'attaquant.
+        En manipulant des variables qui font référence à des fichiers avec des chemins \textquote{dot-dot-slash \lstinline{../}} et ses variations ou en utilisant des chemins de fichiers absolus, il peut être possible d'accéder à des fichiers et répertoires arbitraires stockés sur le système de fichiers, y compris le code source de l'application ou des fichiers de configuration et des données sensibles.
+        L'OS et ses droits ont un rôle à jouer, car l'attaquant a les droits du serveur web.
+        \bigbreak
+        Cette attaque est également connue sous les noms de \textquote{dot-dot-slash}, \textquote{directory traversal}, \textquote{directory climbing} et \textquote{backtracking}.
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Path Traversal}
+        \framesubtitle{Examples}
+        \transdissolve
+        Tout le monde est ou a été touché~:
+        \begin{itemize}
+            \item Nginx si on oublie le trailing slash dans la configuration\footnote{nginx alias misconfiguration allowing path traversal , \url{https://davidhamann.de/2022/08/14/nginx-alias-traversal/}}.
+            \item Apache en 2021, Path Traversal menant à une RCE \emoji{face-screaming-in-fear}\footnote{Apache HTTP Server Path Traversal \& Remote Code Execution (CVE-2021-41773 \& CVE-2021-42013), \url{https://blog.qualys.com/vulnerabilities-threat-research/2021/10/27/apache-http-server-path-traversal-remote-code-execution-cve-2021-41773-cve-2021-42013}}.
+            \item Dans \lstinline{node-static}, un serveur de fichiers de statiques\footnote{Directory Traversal, \url{https://security.snyk.io/vuln/SNYK-JS-NODESTATIC-3149928}}.
+            \item Many more\ldots
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Path Traversal}
+        \framesubtitle{Remédiation}
+        \transdissolve
+        Les bonnes pratiques suivantes sont à suivre pour éviter les risques de Path Traversal~:
+        \begin{itemize}
+            \item Les URL doivent retourner des données sur la base de l'identifiant de l'entité et non sur la base du chemin sur le système de fichier.
+            \item Mettre à jour les serveurs web et les applications pour limiter les zéros days.
+            \item Utiliser des outils de scanning pour détecter les vulnérabilités.
+            \item Utiliser des librairies faites pour ramener des fichiers de manière sécurisée.
+            Tous les frameworks modernes ont des librairies pour cela.
+            \item Isoler le serveur web dans un chroot ou un container.
+        \end{itemize}
+    \end{frame}
+
+
+    \section{Les impacts}\label{sec:les-impacts}
+
+    \subsection{Impact financier direct}\label{subsec:impact-financier-direct}
+    \begin{frame}
+        \frametitle{Impact financier direct}
+        \framesubtitle{Réglementaire\footnote{Sanctions et mesures correctrices : la CNIL présente le bilan 2023 de son action répressive ~: \url{https://www.cnil.fr/fr/sanctions-et-mesures-correctrices-la-cnil-presente-le-bilan-2023-de-son-action-repressive}}}
+        \transdissolve
+        \centering
+        \includegraphics[width=11cm]{image/sanctions-cnil-2023}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Impact financier direct}
+        \framesubtitle{Détournement de moyens monétiques}
+        \transdissolve
+        Un backend stock directement ou indirectement des secrets comme des clés d'API (Stripe, etc), des données financières sensibles.
+        \begin{itemize}
+            \item Hack de Stripe~: 70 k\$ détournés à une web designeuse\footnote{My Stripe Account Was Hacked and Stripe Said I Have To Repay \$70K, \url{https://webdesigneracademy.com/my-stripe-account-was-hacked-and-stripe-said-i-have-to-repay-70k/}}.
+            \item Vol de coordonnées de cartes de crédit dans un plugin Prestashop payant \footnote{Facebook PrestaShop module exploited to steal credit cards, \url{https://www.bleepingcomputer.com/news/security/facebook-prestashop-module-exploited-to-steal-credit-cards/}}.
+        \end{itemize}
+    \end{frame}
+
+    \subsection{Le risque réputationnel}\label{subsec:risque-reputationnel}
+    \begin{frame}
+        \frametitle{Risque réputationnel}
+        \framesubtitle{La rigueur s'impose dans certains domaines}
+        \transdissolve
+        \textit{Normalement} un acteur sensible (finance, défense, santé) du numérique qui voit ses données fuirent devrait disparaître\ldots
+        \begin{itemize}
+            \item Flow Bank~: Flow bank victime de vol de données, le régulateur ferme la banque moins d'un an plus tard\footnote{Des hackers ont accédé aux données client d’une banque en ligne, \url{https://www.20min.ch/fr/story/des-hackers-ont-accede-aux-donnees-client-dune-banque-en-ligne-736748131987}}\footnotestep\footnote{Faillite d’une banque suisse~: Entre fraude et dissimulation, découvrez les révélations chocs~!, \url{https://moneyradar.org/articles-economie-societe/fin-de-flowbank-entre-fraude-dissimulation-et-faillite-decouvrez-les-revelations-chocs/}}.
+            \item Crédit Suisse~: Crédit Suisse, qui blanchit l'argent du traffic de drogue et disparaît un an plus tard\footnote{Data Leak Shows Credit Suisse’s Criminal Clientele, Bank Denies Wrongdoings, \url{https://www.financemagnates.com/institutional-forex/data-leak-shows-credit-suisses-criminal-clientele-bank-denies-wrongdoings/}}.
+        \end{itemize}
+    \end{frame}
+\end{document}
