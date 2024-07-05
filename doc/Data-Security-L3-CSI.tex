@@ -42,6 +42,30 @@
     \section{Les vecteurs d'attaque}\label{sec:les-vecteurs-dattaque}
 
     \subsection{Le buffer overflow}\label{subsec:les-buffer-overflow}
+
+    \begin{frame}[fragile]
+        \frametitle{Buffer Overflow}
+        \framesubtitle{Définition}
+        \transdissolve
+        \begin{footnotesize}
+            Le débordement de tampon désigne une anomalie qui se produit lorsqu'un logiciel écrit des données dans une mémoire tampon jusqu'à surcharger la capacité de cette dernière, entraînant ainsi l'écrasement des emplacements de mémoire adjacents.
+
+            En d'autres termes, un trop grand nombre d'informations sont transmises dans un conteneur ne disposant pas de suffisamment d'espace et ces dernières finissent par remplacer les données situées dans les conteneurs adjacents.
+            \begin{columns}
+                \begin{column}{0.7\textwidth}
+                    Les pirates peuvent tirer parti du débordement de tampon pour modifier la mémoire d'un ordinateur afin de perturber l'exécution d'un programme ou d'en prendre le contrôle\footnotemark.
+                    \bigbreak
+                    Aux États-Unis, le sujet est pris en main par la Maison Blanche qui donne chaque année ses recommandations sur la gestion de la mémoire dans le développement logiciel\footnotemark.
+                \end{column}
+                \begin{column}{0.3\textwidth}
+                    \includegraphics[width=3cm]{image/old-senile-at-white-house}
+                \end{column}
+            \end{columns}
+            \footnotetext{Statements of Support for Software Measurability and Memory Safety, \url{https://www.whitehouse.gov/oncd/briefing-room/2024/02/26/memory-safety-statements-of-support/}}
+            \footnotetext{Qu'est-ce que le débordement de tampon (buffer overflow)~?, \url{https://www.cloudflare.com/fr-fr/learning/security/threats/buffer-overflow/}}
+        \end{footnotesize}
+    \end{frame}
+
     \begin{frame}[fragile]
         \frametitle{Buffer Overflow}
         \framesubtitle{Example de Stack-Based Buffer Overflow\footnote{\label{hacking}Hacking, The art of exploitation, Jon Erickson, 2nd edition}}
@@ -74,29 +98,6 @@ int main(int argc, char *argv[]) {
     }
 }
         \end{lstlisting}
-    \end{frame}
-
-    \begin{frame}[fragile]
-        \frametitle{Buffer Overflow}
-        \framesubtitle{Définition}
-        \transdissolve
-        \begin{footnotesize}
-            Le débordement de tampon désigne une anomalie qui se produit lorsqu'un logiciel écrit des données dans une mémoire tampon jusqu'à surcharger la capacité de cette dernière, entraînant ainsi l'écrasement des emplacements de mémoire adjacents.
-
-            En d'autres termes, un trop grand nombre d'informations sont transmises dans un conteneur ne disposant pas de suffisamment d'espace et ces dernières finissent par remplacer les données situées dans les conteneurs adjacents.
-            \begin{columns}
-                \begin{column}{0.7\textwidth}
-                    Les pirates peuvent tirer parti du débordement de tampon pour modifier la mémoire d'un ordinateur afin de perturber l'exécution d'un programme ou d'en prendre le contrôle\footnotemark.
-                    \bigbreak
-                    Aux États-Unis, le sujet est pris en main par la Maison Blanche qui donne chaque année ses recommandations sur la gestion de la mémoire dans le développement logiciel\footnotemark.
-                \end{column}
-                \begin{column}{0.3\textwidth}
-                    \includegraphics[width=3cm]{image/old-senile-at-white-house}
-                \end{column}
-            \end{columns}
-            \footnotetext{Statements of Support for Software Measurability and Memory Safety, \url{https://www.whitehouse.gov/oncd/briefing-room/2024/02/26/memory-safety-statements-of-support/}}
-            \footnotetext{Qu'est-ce que le débordement de tampon (buffer overflow)~?, \url{https://www.cloudflare.com/fr-fr/learning/security/threats/buffer-overflow/}}
-        \end{footnotesize}
     \end{frame}
 
     \begin{frame}[fragile]
@@ -316,7 +317,7 @@ Access Granted.
 
         L'outil doit présenter un rapport clair et précis des vulnérabilités détectées.
         \bigbreak
-        Testez l'outil sur un script de votre choix et présentez le rapport.
+        Testez l'outil sur un script/code de votre choix et présentez le rapport.
     \end{frame}
 
     \subsection{Path Traversal}\label{path-traversal}
@@ -359,6 +360,194 @@ Access Granted.
             Tous les frameworks modernes ont des librairies pour cela.
             \item Isoler le serveur web dans un chroot ou un container.
         \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Path Traversal}
+        \framesubtitle{Exercice \execcounterdispinc{}}
+        \transdissolve
+        Etudier la documentation du framework web Python Flask et trouver 2 méthodes qui permettent de servir des fichiers statiques de manière sécurisée.
+        \bigbreak
+        \centering
+        \includegraphics[width=6cm]{image/police-blocking-the-road}
+    \end{frame}
+
+
+    \section{La configuration du serveur}\label{sec:configuration-serveur}
+
+    \begin{frame}
+        \frametitle{Configuration du serveur}
+        \framesubtitle{Configuration de Nginx ou Apache}
+        \transdissolve
+        Des données, codes source et fichiers de configuration peuvent-être exposé faute d'une configuration correcte du serveur web.
+        \bigbreak
+        Example, quand Nginx exécute un fichier \lstinline{*.php} ce n'est pas pareil que s'il est indexé par un serveur web~!
+        \bigbreak
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                Si on cherche avec le Google Dork \lstinline{intitle:"index of"} on trouve des répertoires indexés par des serveurs web.
+                Donc avec \lstinline{intitle:"index of" wp-config.php} on trouve des fichiers de configuration de Wordpress et les identifiants de connection aux bases.
+
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \includegraphics[width=5cm]{image/dork-on-google}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Configuration du serveur}
+        \framesubtitle{Configuration de Nginx ou Apache}
+        \transdissolve
+        Pour ne pas indexer la configuration et le code source de votre site web, il faut ajouter les lignes suivantes dans la configuration de Nginx ou Apache~:
+        \begin{itemize}
+            \item Apache~: Rajouter \lstinline{Options -Indexes} dans le fichier \lstinline{.htaccess}.
+            \item Nginx~: Dans le fichier de configuration, rajouter \lstinline{autoindex off;} dans la \lstinline{location}.
+        \end{itemize}
+        De plus un fichier \lstinline{*.php} doit être exécuté uniquement.
+        \bigbreak
+        \centering
+        \includegraphics[width=6cm]{image/php-to-execute}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Configuration du serveur}
+        \framesubtitle{Configuration de Nginx ou Apache}
+        \transdissolve
+        On peut donc accéder aux données en base à partir de fichiers de configuration ou de sources.
+        \bigbreak
+        On peut parfois accéder \href{https://www.google.com/search?q=intitle\%3A\%22index+of+sqldump\%22}{directement aux données}~:
+        \bigbreak
+        \centering
+        \includegraphics[width=8cm]{image/dork-sqldump}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Configuration du serveur}
+        \framesubtitle{Exercice}
+        \transdissolve
+        Exercice \execcounterdispinc{}~:
+        Expliquer quelle(s) mauvaise(s) configuration(s) du serveur peuvent mener à la fuite de données du slide précédent.
+        \bigbreak
+        Exercice \execcounterdispinc{}~:
+        Quelles fichiers de configuration des \textquote{robots d'indexation} peuvent être utilisés pour ajouter une couche de sécurité et limiter en théorie l'indexation de fichiers sensibles~?
+        Exercice \execcounterdispinc{}~:
+        Quelle information sensible ne doit pas être donnée au \textquote{robots d'indexation}~?
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Configuration du serveur}
+        \framesubtitle{Les fichiers de log}
+        \transdissolve
+        \centering
+        \includegraphics[width=12cm]{image/mail-anssi}
+    \end{frame}
+
+
+    \section{OAuth 2}\label{sec:oauth-2}
+    \begin{frame}
+        \frametitle{OAuth2}
+        \framesubtitle{Définition\footnote{OAuth 2.0, \url{https://oauth.net/2/}}}
+        \transdissolve
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                OAuth 2.0 est le protocole de référence dans l'industrie pour l'autorisation.
+
+                Il met l'accent sur la simplicité pour les développeurs clients tout en fournissant des flux d'autorisation spécifiques pour les applications web, les applications de bureau, les téléphones mobiles et les appareils de salon.
+                Cette spécification et ses extensions sont développées au sein du groupe de travail OAuth de l'IETF~.
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \includegraphics[width=6cm]{image/oauth2-flow}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{OAuth2}
+        \framesubtitle{Définition\footnote{Qu'est-ce que l'OAuth~? \url{https://www.cloudflare.com/fr-fr/learning/access-management/what-is-oauth/}}}
+        \transdissolve
+        L'OAuth est une norme technique permettant de donner des autorisations aux utilisateurs.
+        Il s'agit d'un protocole permettant de transmettre une autorisation d'un service à un autre sans partager les informations d'identification de l'utilisateur, telles qu'un nom d'utilisateur et un mot de passe.
+        Avec l'OAuth, un utilisateur peut se connecter à une plateforme, puis être autorisé à effectuer des actions et à consulter des données sur une autre plateforme.
+        \bigbreak
+        L'OAuth permet de transmettre l'autorisation d'une application à une autre, quelle que soit la nature des deux applications.
+        L'OAuth est l'une des méthodes les plus courantes utilisées pour transmettre l'autorisation d'un service d'authentification unique (SSO) à une autre application cloud, mais il peut être utilisé entre deux applications quelconques.
+        L'OAuth est un des protocoles les plus utilisés.
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{OAuth2}
+        \framesubtitle{Différence autorisation authentification}
+        \transdissolve
+        Exercice \execcounterdispinc{}~:
+        Expliquer la différence entre l'authentification et l'autorisation.
+        \bigbreak
+        Exercice \execcounterdispinc{}~:
+        Quels sont les avantages de l'autorisation~?
+        \bigbreak
+        Exercice \execcounterdispinc{}~:
+        Quels sont les avantages de l'authentification~?
+        En se basant sur votre compréhension de l'autorisation, qu'est que l'on ne trouvera dans un serveur OAuth2 comme \url{https://github.com/authlib/example-oauth2-server} et qu'il reste à implémenter~?
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{OAuth2}
+        \framesubtitle{OpenID Connect ou OIDC}
+        \transdissolve
+        C'est une surcouche d'OAuth2 qui ajoute l'authentification.
+        Elle n'a pas de point d'API pour les données de l'utilisateur, mais encode les données de l'utilisateur au format JWT~.
+        Ce JWT est signé par le serveur OIDC\footnote{Oauth2 vs OpenId Connect, \url{https://www.ilex-international.com/fr/federation-identite/oauth2-vs-openid-connect}}~.
+
+        Le JWT est signé de manière symétrique ou asymétrique, ce qui permet de vérifier son authenticité côté client/audience.
+        \bigbreak
+        Le client est l'application à laquelle OAuth autorise l'accès.
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{OAuth2}
+        \framesubtitle{Intégration d'un serveur d'autorisation}
+        \transdissolve
+        Exercice \execcounterdispinc{}~:
+        Faites des groupes et faites fonctionner le serveur OAuth2 comme indiqué sur \url{https://github.com/authlib/example-oauth2-server}.
+        \bigbreak
+        \centering
+        \includegraphics[width=6cm]{image/OAuth2-integration.drawio}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{OAuth2}
+        \framesubtitle{Intégration d'un serveur d'autorisation}
+        \transdissolve
+        Exercice \execcounterdispinc{}~:
+        Ajouter l'algorithme de hashage de mot de passe selon les standards de sécurité modernes.
+        \bigbreak
+        Exercice \execcounterdispinc{}~:
+        À l'aide de SQLAlchemy, créer un modèle avec tous les objets requis en base pour les données persistantes de OAuth2.
+        \bigbreak
+        \centering
+        \includegraphics[width=6cm]{image/OAuth2-integration.drawio}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{OAuth2}
+        \framesubtitle{Intégration d'un serveur d'autorisation}
+        \transdissolve
+        Exercice \execcounterdispinc{}~:
+        Pour administrer le SSO, créer les users, etc.
+        Une solution est de créer un comte de type super admin.
+        Pour plus de simplicité, on va protéger le serveur OAuth2 avec \lstinline{auth_basic} et \lstinline{auth_basic_user_file}.
+        \bigbreak
+        Exercice \execcounterdispinc{}~:
+        Les audiences à intégrer sont~:
+        \begin{itemize}
+            \item \lstinline{flask-annecy-iban.py} avec JWT~.
+            \item \lstinline{flask-st-mich-iban.py} avec un appel au endpoint \lstinline{/authorize}~.
+        \end{itemize}
+        \bigbreak
+        \centering
+        \includegraphics[width=6cm]{image/OAuth2-integration.drawio}
     \end{frame}
 
 
