@@ -297,7 +297,7 @@ Access Granted.
         \frametitle{Supply chain attack}
         \framesubtitle{Remédiations~: Les outils de scanning\cref{snyk2023}}
         \transdissolve
-        Diminution globale peut-être dû aux outils de scanning, SonarQube, CodeQL, Docker Desktop, NPM, etc.
+        Diminution globale peut-être dû aux outils de scanning, SonarQube, CodeQL, Docker Desktop, NPM, \textit{etc}.
         \bigbreak
         \centering
         \includegraphics[width=10cm]{image/vuln-time-to-fix}
@@ -500,9 +500,45 @@ Access Granted.
         Elle n'a pas de point d'API pour les données de l'utilisateur, mais encode les données de l'utilisateur au format JWT~.
         Ce JWT est signé par le serveur OIDC\footnote{Oauth2 vs OpenId Connect, \url{https://www.ilex-international.com/fr/federation-identite/oauth2-vs-openid-connect}}~.
 
-        Le JWT est signé de manière symétrique ou asymétrique, ce qui permet de vérifier son authenticité côté client/audience.
+        Le JWT est signé de manière symétrique ou asymétrique, ce qui permet de vérifier son authenticité côté client.
         \bigbreak
         Le client est l'application à laquelle OAuth autorise l'accès.
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{OAuth2}
+        \framesubtitle{L'application cliente ou client}
+        \transdissolve
+        Le client n'a besoin que de l'ID du client et du secret du client pour obtenir un token d'accès.
+        \bigbreak
+        Il doit passer au serveur une URI de redirection, parfois aussi appelée callback URL, pour recevoir le token d'accès.
+        \bigbreak
+        De nombreux clouds providers ont des SDK pour faciliter l'intégration d'applications à leurs serveurs OAuth2.
+        \bigbreak
+        Exemple de Google GCP qui propose de connecter deux types d'applications~:
+        \begin{itemize}
+            \item Les publiques, accessibles aux utilisateurs hors de l'organisation du compte GCP ayant un compte Google.
+            \item Les internes qui sont accessibles uniquement aux utilisateurs de l'organisation du compte GCP~.
+        \end{itemize}
+        Des libraries clientes sont disponibles pour les langages de programmation les plus courants.
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{OAuth2}
+        \framesubtitle{L'application cliente ou client}
+        \transdissolve
+        De nombreuses offres de SAAS OAuth2 sont disponibles pour les développeurs.
+        Parmi elles Auth0 by Oka est un SAAS dédié aux services autour de OAuth2\footnote{Secure access for everyone But not just anyone\url{https://auth0.com/}}.
+        \bigbreak
+        C'est la partie serveur du protocole.
+        Auth0 tente d'abstraire la complexité du protocole et l'instanciation d'un serveur OAuth2.
+        Il n'y a pas de base de données à gérer.
+        Tout est managé par Auth0.
+        Pas d'écran ni de workflow de gestions des utilisateurs, des rôles, des organisations, \textit{etc}, à développer.
+        \bigbreak
+        Comme sur toutes ces plateformes un SDK est disponible pour les langages de programmation les plus courants et toutes les plateformes (M2M, Web, mobile).
+        \bigbreak
+        Exercice \execcounterdispinc{}~: Faites des groupes, créez un compte sur Auth0 et connecter l'application Flask \lstinline{flask-banque-dulac-iban.py} à Auth0.
     \end{frame}
 
     \begin{frame}
@@ -510,7 +546,7 @@ Access Granted.
         \framesubtitle{Intégration d'un serveur d'autorisation}
         \transdissolve
         Exercice \execcounterdispinc{}~:
-        Faites des groupes et faites fonctionner le serveur OAuth2 comme indiqué sur \url{https://github.com/authlib/example-oauth2-server}.
+        Toujours en groupe, faites fonctionner le serveur OAuth2 comme indiqué sur \url{https://github.com/authlib/example-oauth2-server} sur une VM Ubuntu ou Debian d'un des clusters Proxmox.
         \bigbreak
         \centering
         \includegraphics[width=6cm]{image/OAuth2-integration.drawio}
@@ -535,21 +571,32 @@ Access Granted.
         \framesubtitle{Intégration d'un serveur d'autorisation}
         \transdissolve
         Exercice \execcounterdispinc{}~:
-        Pour administrer le SSO, créer les users, etc.
+        Pour administrer le SSO, créer les users, \textit{etc}.
         Une solution est de créer un comte de type super admin.
         Pour plus de simplicité, on va protéger le serveur OAuth2 avec \lstinline{auth_basic} et \lstinline{auth_basic_user_file}.
-        \bigbreak
-        Exercice \execcounterdispinc{}~:
-        Les audiences à intégrer sont~:
-        \begin{itemize}
-            \item \lstinline{flask-annecy-iban.py} avec JWT~.
-            \item \lstinline{flask-st-mich-iban.py} avec un appel au endpoint \lstinline{/authorize}~.
-        \end{itemize}
-        \bigbreak
-        \centering
-        \includegraphics[width=6cm]{image/OAuth2-integration.drawio}
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                Exercice \execcounterdispinc{}~:
+                Les clients à intégrer sont~:
+                \begin{itemize}
+                    \item \lstinline{flask-annecy-iban.py} avec JWT~.
+                    \item \lstinline{flask-st-mich-iban.py} avec un appel au endpoint \lstinline{/oauth/token}~.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \includegraphics[width=6cm]{image/OAuth2-integration.drawio}
+            \end{column}
+        \end{columns}
     \end{frame}
 
+    \begin{frame}
+        \frametitle{OAuth2}
+        \framesubtitle{Setup de ORY Hydra}
+        \transdissolve
+        Exercice \execcounterdispinc{}~:
+        Suivre le tutorial \url{https://www.ory.sh/docs/hydra/5min-tutorial} pour installer ORY Hydra avec Docker.
+    \end{frame}
 
     \section{Les impacts}\label{sec:les-impacts}
 
@@ -566,7 +613,7 @@ Access Granted.
         \frametitle{Impact financier direct}
         \framesubtitle{Détournement de moyens monétiques}
         \transdissolve
-        Un backend stock directement ou indirectement des secrets comme des clés d'API (Stripe, etc), des données financières sensibles.
+        Un backend stock directement ou indirectement des secrets comme des clés d'API (Stripe, \textit{etc}), des données financières sensibles.
         \begin{itemize}
             \item Hack de Stripe~: 70 k\$ détournés à une web designeuse\footnote{My Stripe Account Was Hacked and Stripe Said I Have To Repay \$70K, \url{https://webdesigneracademy.com/my-stripe-account-was-hacked-and-stripe-said-i-have-to-repay-70k/}}.
             \item Vol de coordonnées de cartes de crédit dans un plugin Prestashop payant \footnote{Facebook PrestaShop module exploited to steal credit cards, \url{https://www.bleepingcomputer.com/news/security/facebook-prestashop-module-exploited-to-steal-credit-cards/}}.
