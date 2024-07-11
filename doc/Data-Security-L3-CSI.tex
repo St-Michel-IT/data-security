@@ -373,10 +373,10 @@ Access Granted.
     \end{frame}
 
 
-    \section{La configuration du serveur}\label{sec:configuration-serveur}
+    \section{La mauvaise configuration du serveur}\label{sec:configuration-serveur}
 
     \begin{frame}
-        \frametitle{Configuration du serveur}
+        \frametitle{Mauvaise configuration du serveur}
         \framesubtitle{Configuration de Nginx ou Apache}
         \transdissolve
         Des données, codes source et fichiers de configuration peuvent-être exposé faute d'une configuration correcte du serveur web.
@@ -397,7 +397,7 @@ Access Granted.
     \end{frame}
 
     \begin{frame}
-        \frametitle{Configuration du serveur}
+        \frametitle{Mauvaise configuration du serveur}
         \framesubtitle{Configuration de Nginx ou Apache}
         \transdissolve
         Pour ne pas indexer la configuration et le code source de votre site web, il faut ajouter les lignes suivantes dans la configuration de Nginx ou Apache~:
@@ -412,7 +412,7 @@ Access Granted.
     \end{frame}
 
     \begin{frame}
-        \frametitle{Configuration du serveur}
+        \frametitle{Mauvaise configuration du serveur}
         \framesubtitle{Configuration de Nginx ou Apache}
         \transdissolve
         On peut donc accéder aux données en base à partir de fichiers de configuration ou de sources.
@@ -424,7 +424,7 @@ Access Granted.
     \end{frame}
 
     \begin{frame}
-        \frametitle{Configuration du serveur}
+        \frametitle{Mauvaise configuration du serveur}
         \framesubtitle{Exercice}
         \transdissolve
         Exercice \execcounterdispinc{}~:
@@ -437,7 +437,7 @@ Access Granted.
     \end{frame}
 
     \begin{frame}
-        \frametitle{Configuration du serveur}
+        \frametitle{Mauvaise configuration du serveur}
         \framesubtitle{Les fichiers de log}
         \transdissolve
         \centering
@@ -445,7 +445,9 @@ Access Granted.
     \end{frame}
 
 
-    \section{OAuth 2}\label{sec:oauth-2}
+    \section{Développer le serveur applicatif}\label{sec:dev-serveur-applicatif}
+
+    \subsection{OAuth 2}\label{subsec:oauth-2}
     \begin{frame}
         \frametitle{OAuth2}
         \framesubtitle{Définition\footnote{OAuth 2.0, \url{https://oauth.net/2/}}}
@@ -543,6 +545,14 @@ Access Granted.
 
     \begin{frame}
         \frametitle{OAuth2}
+        \framesubtitle{Rappel sur le mécanisme de transfer de Cookie\footnote{Cookie and Session (I): The basic concept, \url{https://medium.com/@alysachan830/cookie-and-session-i-the-basic-concept-fea3d52bc8d3}}}
+        \transdissolve
+        \centering
+        \includegraphics[width=9cm]{image/cookie-session}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{OAuth2}
         \framesubtitle{Intégration d'un serveur d'autorisation}
         \transdissolve
         Exercice \execcounterdispinc{}~:
@@ -582,6 +592,12 @@ Access Granted.
                     \item \lstinline{flask-annecy-iban.py} avec JWT~.
                     \item \lstinline{flask-st-mich-iban.py} avec un appel au endpoint \lstinline{/oauth/token}~.
                 \end{itemize}
+                Avec le paramétrage suivant~:
+                \begin{itemize}
+                    \item Allowed Scope~: \lstinline{openid profile}.
+                    \item Allowed Response Types~: \lstinline{code}.
+                    \item Token Endpoint Auth Method~: \lstinline{client_secret_basic}.
+                \end{itemize}
             \end{column}
             \begin{column}{0.4\textwidth}
                 \centering
@@ -592,11 +608,231 @@ Access Granted.
 
     \begin{frame}
         \frametitle{OAuth2}
-        \framesubtitle{Setup de ORY Hydra}
+        \framesubtitle{Setup d'un serveur OAuth2 déjà développé}
         \transdissolve
         Exercice \execcounterdispinc{}~:
         Suivre le tutorial \url{https://www.ory.sh/docs/hydra/5min-tutorial} pour installer ORY Hydra avec Docker.
+        \bigbreak
+        Exercice \execcounterdispinc{}~:
+        Suivre le tutorial \url{https://www.keycloak.org/getting-started/getting-started-docker} pour installer Keycloak et sécuriser une app via OAuth2.
     \end{frame}
+
+    \subsection{Protection du serveur}\label{subsec:protection-serveur}
+    \begin{frame}
+        \frametitle{Protection du serveur}
+        \framesubtitle{Sécurisation du SSH avec la cryptographie asymétrique}
+        \transdissolve
+        \begin{footnotesize}
+            Pourquoi est-ce plus sécure d'utiliser une clé SSH plutôt qu'un mot de passe~?
+            \bigbreak
+            Quels algorithmes et taille de clé sont recommandés~?
+            \pause
+            \bigbreak
+            Sur le site \url{https://jadaptive.com/ssh-key-management/the-benefits-of-ssh-key-authentication/} on trouve~:
+            \begin{columns}
+                \begin{column}{0.6\textwidth}
+                    \begin{itemize}
+                        \item Le mot de passe doit être communiqué à chaque connexion, il est donc plus vulnérable à une interception/sniffing/MITHM~.
+                        La clé privée reste sur le client, elle n'est pas communiquée.
+                        \item La clé SSH est plus complexe à deviner qu'un mot de passe.
+                        \item On peut automatiser des taches depuis la machine cliente avec la clé SSH~.
+                    \end{itemize}
+                \end{column}
+                \begin{column}{0.4\textwidth}
+                    \centering
+                    \includegraphics[width=5cm]{image/ssh-key-diagram} \\ Foxpass\footnotemark \\
+                \end{column}
+            \end{columns}
+            \flushleft
+            Exercice \execcounterdispinc{}~:
+            Restreindre l'accès à la VM au SSH avec une clé SSH, aucun mot de passe.
+            \footnotetext{Learn SSH Keys in Minutes, \url{https://www.foxpass.com/blog/learn-ssh-keys-in-minutes/}}
+        \end{footnotesize}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Protection du serveur}
+        \framesubtitle{Sécurisation des clés et des secrets}
+        \transdissolve
+        Que se passe-t-il si une personne malveillante a accès à votre ordinateur~?
+        \bigbreak
+        Par défaut, quels OS offrent quelles protections des données sur le disque~?
+        \pause
+        \bigbreak
+        \begin{itemize}
+            \item Windows~: BitLocker, n'a pas bonne réputation et dépend de l'implémentation, voir \url{https://www.youtube.com/watch?v=wTl4vEednkQ}.
+            \item MacOS~: FileVault.
+            \item Linux~: LUKS, \lstinline{ecryptfs-utils}, YubiKey, encryption du disque dès l'installation, \textit{etc}.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \frametitle{Protection du serveur}
+        \framesubtitle{Exemple de sécurisation des clés et des secrets sous Linux}
+        \transdissolve
+        Par défaut, Ubuntu desktop s’installe sur une partition non
+        chiffrée (encrypter, ce n’est pas français on dit chiffrer~!~).
+        Tout document peut donc être lu avec un disque de
+        démarrage (live CD, USB bootable, etc) ou si le disque dur
+        est extrait et lu.
+        \bigbreak
+        Avec le package \lstinline{ecryptfs-utils} on peut chiffrer une partition~:
+        \begin{lstlisting}[language=bash]
+sudo apt-get install ecryptfs-utils
+ecryptfs-setup-private
+cp -r .ssh/ Private/ # Pour proteger les clés SSH on les déplace
+ln -s /home/<mon user Ubuntu>/Private/.ssh/ . # Lien symbolique
+        \end{lstlisting}
+        Output~:
+        \begin{lstlisting}
+$ ls ~/.ssh -d -lha
+lrwxrwxrwx 1 chrichri chrichri 28 janv. 14 21:27 /home/chrichri/.ssh -> /home/chrichri/Private/.ssh/
+        \end{lstlisting}
+        Il utilise le mot de passe de la session pour chiffrer/déchiffrer.
+        Si la session n'est pas ouverte, les données sont chiffrées.
+    \end{frame}
+
+
+    \begin{frame}
+        \frametitle{Protection de la base}
+        \framesubtitle{Exemple de MySQL}
+        \transdissolve
+        Les configurations par défaut de MySQL sont souvent inadaptées, tant sur le plan de la sécurité que de la performance.
+        \bigbreak
+        Quels options peuvent être configurées pour sécuriser une base de données MySQL~?
+        \pause
+        \bigbreak
+        Des exemples d'options de sécurisation d'une base de données MySQL sont~:
+        \begin{itemize}
+            \item \lstinline{skip-networking}~: Désactive les connexions TCP/IP.
+            Elle limite les connexions aux clients sur l'hôte local.
+            \item \lstinline{require_secure_transport}~: Qui oblige les connexions à utiliser un chiffrement SSL/TLS et l'usage de certificats ou alors d'un Unix Domain Socket.
+        \end{itemize}
+        C'est quoi un Unix Domain Socket~?
+    \end{frame}
+
+    \subsection{Certificat SSL}\label{subsec:certificat-ssl}
+    \begin{frame}
+        \transdissolve
+        \frametitle{Apache et Nginx}
+        \framesubtitle{Exemple de configuration avec un certificat SSL}
+        Les standards modernes de sécurité web recommandent très fortement le HTTPS et l'utilisation de certificat SSL~.
+        Les clients de votre application en sont demandeur aussi.
+        \bigbreak
+        On peut l'acheter chez une autorité (CA) de certification comme Comodo ou autre.
+        Pour seulement quelques centaines ou milliers d'Euros par an \emoji{face-with-symbols-on-mouth}.
+        Ou on peut utiliser Let's Encrypt qui est gratuit.
+        \bigbreak
+        Let's Encrypt est un projet de CA de la \textquote{Internet Security Research Group} (ISRG) qui fournit des certificats SSL gratuits.
+        Il est sponsorisé par de nombreuses entreprises du numérique.
+
+        Le moyen le plus simple de l'installer sur votre serveur, dans votre configuration Nginx ou Apache est d'utiliser \lstinline{certbot}\footnote{Certbot, \url{https://certbot.eff.org/}}.
+        \bigbreak
+        Qu'apporte le certificat SSL à la sécurité de votre application~?
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Apache et Nginx}
+        \framesubtitle{Exemple de configuration avec un certificat SSL}
+        Avec les droits root ou en sudoer, \lstinline{certbot} installe le certificat et modifie la configuration Nginx ou Apache.
+
+        La commande suivante~:
+        \begin{lstlisting}[language=bash,basicstyle=\ttfamily\tiny]
+$ sudo certbot --nginx -d your_domain
+        \end{lstlisting}
+        Modifie la configuration comme suit~:
+        \begin{lstlisting}[basicstyle=\ttfamily\tiny]
+server {
+    listen 443 ssl; # Managed by Certbot
+
+    ssl on; # Managed by Certbot
+    ssl_certificate     /etc/letsencrypt/live/your_domain/fullchain.pem; # Managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/your_domain/privkey.pem; # Managed by Certbot
+
+    server_name your_domain;
+
+    location / {
+        proxy_pass http://unix:/var/run/sock-guni;
+        include proxy_params;
+    }
+}
+
+server {
+    listen 80 default_server; # Managed by Certbot
+    server_name your_domain; # Managed by Certbot
+    return 301 https://$host$request_uri; # Managed by Certbot
+}
+        \end{lstlisting}
+    \end{frame}
+
+    \subsection{Cryptographie Asymétrique}\label{subsec:cryptographie-asymetrique}
+    \begin{frame}
+        \frametitle{Cryptographie Asymétrique}
+        \framesubtitle{Très brève introduction\footnote{Initiation à la cryptographie, Gilles Bubertret, 3\textsuperscript{eme} édition, Vuibert}}
+        \transdissolve
+        Deux grandes familles de cryptographie asymétrique~:
+        \begin{itemize}
+            \item RSA~: Rivest, Shamir, Adleman.
+            Algorithme publié en 1978.
+            Basé sur la factorisation de grands nombres premiers et l'arithmétique modulaire.
+            Parce qu'il y a un déséquilibre entre la facilité de multiplication et la difficulté de factorisation.
+            \item ECC~: Elliptic Curve Cryptography.
+            Développé par Neal Koblitz et Victor Miller et publié en 1985.
+            Ces algorithmes sont recommandés par le NIST dans les années 2000.
+            On utilise des courbes elliptiques pour la cryptographie dans les clés SSH, les cartes bancaires, le Bitcoin, \textit{etc}.
+        \end{itemize}
+        \begin{columns}
+            \begin{column}{0.8\textwidth}
+                A sécurité égale la taille des clés ECC est plus petite que celle des clés RSA~.
+            \end{column}
+            \begin{column}{0.2\textwidth}
+                \centering
+                \includegraphics[width=2cm]{image/girl-hiding-a-secret}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \subsection{Post-quantum cryptography}\label{subsec:pqc}
+    \begin{frame}
+        \frametitle{Post-quantum cryptography}
+        \framesubtitle{Définition\footnote{Quantum-safe Cryptography Algorithms, \url{https://research.ibm.com/projects/quantum-safe-cryptography}}}
+        \transdissolve
+        Concerne la conception et la mise en œuvre de protocoles qui sont censés être sécurisés contre les capacités de calcul accrues des ordinateurs quantiques.
+        Les deux familles quantiques qui posent des problèmes à la cryptographie actuelle sont l'algorithme de Grover et l'algorithme de Shor.
+        \bigbreak
+        Grover affecte principalement la sécurité des primitives à clé symétrique (par exemple, AES, SHA-256, etc.) et la protection contre celui-ci nécessite généralement de simplement doubler la taille de la clé.
+        \bigbreak
+        Shor, quant à lui, est plus problématique pour la sécurité de certaines primitives à clé publique (par exemple, RSA, EC-DSA, etc.).
+        Pour résister à l'algorithme de Shor, les tailles de clé devraient augmenter de manière exponentielle, ce qui les rendrait pratiquement inutilisables.
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Post-quantum cryptography}
+        \framesubtitle{La vidéo}
+        \transdissolve
+        Sur le channel Youtube \textquote{IBM Technology}, un super channel~! \url{https://www.youtube.com/watch?v=ecvCfTPRBrI}
+        \bigbreak
+        \centering
+        \includegraphics[width=7cm]{image/man-at-the-cinema-eating pop-corn}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Post-quantum cryptography}
+        \framesubtitle{Les débuts}
+        \begin{footnotesize}
+            \transdissolve
+            Le NIST a lancé un processus de standardisation pour les algorithmes de chiffrement post-quantique (PQC) en 2016.
+            Les premiers ont été publiés en 2022.
+            Parmi eux, les plus connus, voir prometteurs sont Kyber (clé publique) et Dilithium (signature), poussés en grande partie par IBM, sont deux exemples d'algorithmes de chiffrement post-quantique basé sur les \textquote{lattice} et le \textquote{Learn With Error}.
+            \bigbreak
+            Cloudflare propose déjà le protocole TLS 1.3 avec l'algorithme de chiffrement post-quantique \textquote{Kyber Crystal}\footnote{\url{https://blog.cloudflare.com/post-quantum-crypto-should-be-free}}.
+            \bigbreak
+            L'IETF travaille sur un brouillon de la standardisation de JOSE et COSE avec Dilithium.
+            Donc la PQC arrive dans OAuth2 et OpenID Connect car JOSE est utilisé pour les JWT\footnote{Post-quantum token signing with Dilithium using Duende Identity Server, \url{https://www.strathweb.com/2023/03/post-quantum-token-signing-with-dilithium-using-duende-identity-server/}}\emoji{heart}.
+        \end{footnotesize}
+    \end{frame}
+
 
     \section{Les impacts}\label{sec:les-impacts}
 
