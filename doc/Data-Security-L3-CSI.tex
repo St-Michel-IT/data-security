@@ -17,7 +17,6 @@
 \begin{document}
 
     \begin{frame}
-        \transdissolve
         \titlepage
     \end{frame}
 
@@ -27,10 +26,7 @@
 
 
     \section{Programme du module}\label{sec:programme-du-module}
-    \begin{frame}
-        \frametitle{Data Security}
-        \framesubtitle{Compétences}
-        \transdissolve
+    \begin{frame}{Data Security}{Compétences}
         \begin{itemize}
             \item Connaître et comprendre les vecteurs d'attaques sur la donnée.
             \item Connaître les moyens de remédiation aux attaques.
@@ -43,10 +39,7 @@
 
     \subsection{Le buffer overflow}\label{subsec:les-buffer-overflow}
 
-    \begin{frame}[fragile]
-        \frametitle{Buffer Overflow}
-        \framesubtitle{Définition}
-        \transdissolve
+    \begin{frame}{Buffer Overflow}{Définition}
         \begin{footnotesize}
             Le débordement de tampon désigne une anomalie qui se produit lorsqu'un logiciel écrit des données dans une mémoire tampon jusqu'à surcharger la capacité de cette dernière, entraînant ainsi l'écrasement des emplacements de mémoire adjacents.
 
@@ -66,10 +59,7 @@
         \end{footnotesize}
     \end{frame}
 
-    \begin{frame}[fragile]
-        \frametitle{Buffer Overflow}
-        \framesubtitle{Example de Stack-Based Buffer Overflow\footnote{\label{hacking}Hacking, The art of exploitation, Jon Erickson, 2nd edition}}
-        \transdissolve
+    \begin{frame}[fragile]{Buffer Overflow}{Example de Stack-Based Buffer Overflow\footnote{\label{hacking}Hacking, The art of exploitation, Jon Erickson, 2nd edition}}
         Le programme \lstinline{auth-overflow.c} est un programme en C qui vérifie un mot de passe et est vulnérable à un buffer overflow~:
         % C listing
         \begin{lstlisting}[language=C,basicstyle=\tiny\ttfamily]
@@ -100,10 +90,7 @@ int main(int argc, char *argv[]) {
         \end{lstlisting}
     \end{frame}
 
-    \begin{frame}[fragile]
-        \frametitle{Buffer Overflow}
-        \framesubtitle{Example de Stack-Based Buffer Overflow\cref{hacking}}
-        \transdissolve
+    \begin{frame}[fragile]{Buffer Overflow}{Example de Stack-Based Buffer Overflow\cref{hacking}}
         % C listing
         \begin{lstlisting}[language=bash]
 $ gcc auth-overflow.c -o auth-overflow
@@ -124,10 +111,7 @@ Abandon (core dumped)
         Il parle de la stack, car c'est dans cette mémoire que les variables locales sont stockées.
     \end{frame}
 
-    \begin{frame}[fragile]
-        \frametitle{Buffer Overflow}
-        \framesubtitle{Example de Stack-Based Buffer Overflow\cref{hacking}}
-        \transdissolve
+    \begin{frame}[fragile]{Buffer Overflow}{Example de Stack-Based Buffer Overflow\cref{hacking}}
         \begin{lstlisting}[language=bash]
 $ gcc auth-overflow.c -fno-stack-protector -o auth-overflow
 $ ./auth-overflow $(python3 -c "print('A'*25)")
@@ -148,10 +132,7 @@ Access Granted.
         \end{columns}
     \end{frame}
 
-    \begin{frame}[fragile]
-        \frametitle{Buffer Overflow}
-        \framesubtitle{Example de Stack-Based Buffer Overflow: remédiation possible}
-        \transdissolve
+    \begin{frame}[fragile]{Buffer Overflow}{Example de Stack-Based Buffer Overflow: remédiation possible}
         Une approche du type defensive programming consiste à limiter la taille du buffer.
         Exemple avec \lstinline{auth-overflow-size-constraint.c}~:
         % C listing
@@ -185,10 +166,7 @@ int main(int argc, char *argv[]) {
         \end{lstlisting}
     \end{frame}
 
-    \begin{frame}[fragile]
-        \frametitle{Buffer Overflow}
-        \framesubtitle{Example de Stack-Based Buffer Overflow: remédiation possible}
-        \transdissolve
+    \begin{frame}[fragile]{Buffer Overflow}{Example de Stack-Based Buffer Overflow: remédiation possible}
         % C listing
         \begin{lstlisting}[language=bash]
 $ gcc auth-overflow-size-constraint.c -o auth-overflow-size-constraint
@@ -207,17 +185,13 @@ Access Granted.
         On peut en plus isoler dans un Docker ou un chroot, en cas de RCE, elle sera isolée.
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Buffer Overflow}
-        \framesubtitle{Exercices}
-        \transdissolve
+    \begin{frame}{Buffer Overflow}{Exercices}
         Les exercices sont notés pour ceux qui passent y répondre au tableau.
         \bigbreak
         Exercice \execcounterdispinc{}~:
         Étudier les guidelines de la Maison Blanche sur la gestion de la mémoire dans le développement logiciel.
         \bigbreak
         Comprendre et lister ce qui est déconseillé et ce qui conseillé et pourquoi.
-        \transdissolve
         Exercice \execcounterdispinc{}~:
         Comment Java prévient les buffers overflow~?
         \bigbreak
@@ -226,10 +200,7 @@ Access Granted.
     \end{frame}
 
     \subsection{Supply chain attack}\label{subsec:supply-chain-attack}
-    \begin{frame}
-        \frametitle{Supply chain attack}
-        \framesubtitle{Définition\footnote{Attaques de la chaîne d’approvisionnement~: Exemples et contre-mesures, \url{https://www.fortinet.com/fr/resources/cyberglossary/supply-chain-attacks}}}
-        \transdissolve
+    \begin{frame}{Supply chain attack}{Définition\footnote{Attaques de la chaîne d’approvisionnement~: Exemples et contre-mesures, \url{https://www.fortinet.com/fr/resources/cyberglossary/supply-chain-attacks}}}
         Attaque de la chaîne d'approvisionnement en français.
         \bigbreak
         Une attaque de la chaîne d’approvisionnement fait référence au fait que quelqu’un utilise un fournisseur ou un partenaire externe qui a accès à vos données et systèmes pour infiltrer votre infrastructure numérique.
@@ -239,26 +210,17 @@ Access Granted.
         Mais plus connu dans l'open source, qui peut par la suite aller dans le propriétaire.
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Supply chain attack}
-        \framesubtitle{Comparaison des écosystèmes\footnote{\label{snyk}The state of open source security report, \url{https://res.cloudinary.com/snyk/image/upload/v1551172581/The-State-Of-Open-Source-Security-Report-2019-Snyk.pdf}}}
-        \transdissolve
+    \begin{frame}{Supply chain attack}{Comparaison des écosystèmes\footnote{\label{snyk}The state of open source security report, \url{https://res.cloudinary.com/snyk/image/upload/v1551172581/The-State-Of-Open-Source-Security-Report-2019-Snyk.pdf}}}
         \centering
         \includegraphics[width=9cm]{image/vuln-direct-indirect-dependencies}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Supply chain attack}
-        \framesubtitle{Comparaison des écosystèmes\cref{snyk}}
-        \transdissolve
+    \begin{frame}{Supply chain attack}{Comparaison des écosystèmes\cref{snyk}}
         \centering
         \includegraphics[width=9cm]{image/vuln-created}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Supply chain attack}
-        \framesubtitle{Vulnérabilités ignorées par les écosystèmes\footnote{\label{snyk2023}2023 State of Open Source Security Report 2019, \url{https://go.snyk.io/state-of-open-source-security-report-2023-dwn-typ.html}}}
-        \transdissolve
+    \begin{frame}{Supply chain attack}{Vulnérabilités ignorées par les écosystèmes\footnote{\label{snyk2023}2023 State of Open Source Security Report 2019, \url{https://go.snyk.io/state-of-open-source-security-report-2023-dwn-typ.html}}}
         \centering
         \begin{columns}
             \column{0.4\textwidth}
@@ -268,10 +230,7 @@ Access Granted.
         \end{columns}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Supply chain attack}
-        \framesubtitle{Remédiations~: Ne pas \textquote{tirer} n'importequelle dépendance}
-        \transdissolve
+    \begin{frame}{Supply chain attack}{Remédiations~: Ne pas \textquote{tirer} n'importequelle dépendance}
         Les usages de certains packages NPM posent questions~:
         \begin{itemize}
             \item \href{https://www.npmjs.com/package/is-number}{\lstinline{is-number}}~: 69 M téléchargements par semaine.
@@ -293,10 +252,7 @@ Access Granted.
         \end{dangercolorbox}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Supply chain attack}
-        \framesubtitle{Remédiations~: Les outils de scanning\cref{snyk2023}}
-        \transdissolve
+    \begin{frame}{Supply chain attack}{Remédiations~: Les outils de scanning\cref{snyk2023}}
         Diminution globale peut-être dû aux outils de scanning, SonarQube, CodeQL, Docker Desktop, NPM, \textit{etc}.
         \bigbreak
         \centering
@@ -307,9 +263,7 @@ Access Granted.
         \end{dangercolorbox}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Supply chain attack}
-        \framesubtitle{Exercice}
+    \begin{frame}{Supply chain attack}{Exercice}
         Exercice \execcounterdispinc{}~:
         Vous êtes admin système et vous maintenez un pool de scripts Python qui automisent des tâches avec l'API Azure.
         \bigbreak
@@ -323,10 +277,7 @@ Access Granted.
     \subsection{Path Traversal}\label{path-traversal}
 
 
-    \begin{frame}
-        \frametitle{Path Traversal}
-        \framesubtitle{définition\footnote{Path Traversal\url{https://owasp.org/www-community/attacks/Path_Traversal}}}
-        \transdissolve
+    \begin{frame}{Path Traversal}{définition\footnote{Path Traversal\url{https://owasp.org/www-community/attacks/Path_Traversal}}}
         Cette attaque vise à accéder à des fichiers et répertoires qui sont stockés en dehors du dossier racine du site web ou censé être hors des droits de l'attaquant.
         En manipulant des variables qui font référence à des fichiers avec des chemins \textquote{dot-dot-slash \lstinline{../}} et ses variations ou en utilisant des chemins de fichiers absolus, il peut être possible d'accéder à des fichiers et répertoires arbitraires stockés sur le système de fichiers, y compris le code source de l'application ou des fichiers de configuration et des données sensibles.
         L'OS et ses droits ont un rôle à jouer, car l'attaquant a les droits du serveur web.
@@ -334,10 +285,7 @@ Access Granted.
         Cette attaque est également connue sous les noms de \textquote{dot-dot-slash}, \textquote{directory traversal}, \textquote{directory climbing} et \textquote{backtracking}.
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Path Traversal}
-        \framesubtitle{Examples}
-        \transdissolve
+    \begin{frame}{Path Traversal}{Examples}
         Tout le monde est ou a été touché~:
         \begin{itemize}
             \item Nginx si on oublie le trailing slash dans la configuration\footnote{nginx alias misconfiguration allowing path traversal , \url{https://davidhamann.de/2022/08/14/nginx-alias-traversal/}}.
@@ -347,10 +295,7 @@ Access Granted.
         \end{itemize}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Path Traversal}
-        \framesubtitle{Remédiation}
-        \transdissolve
+    \begin{frame}{Path Traversal}{Remédiation}
         Les bonnes pratiques suivantes sont à suivre pour éviter les risques de Path Traversal~:
         \begin{itemize}
             \item Les URL doivent retourner des données sur la base de l'identifiant de l'entité et non sur la base du chemin sur le système de fichier.
@@ -362,10 +307,7 @@ Access Granted.
         \end{itemize}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Path Traversal}
-        \framesubtitle{Exercice \execcounterdispinc{}}
-        \transdissolve
+    \begin{frame}{Path Traversal}{Exercice \execcounterdispinc{}}
         Etudier la documentation du framework web Python Flask et trouver 2 méthodes qui permettent de servir des fichiers statiques de manière sécurisée.
         \bigbreak
         \centering
@@ -375,10 +317,7 @@ Access Granted.
 
     \section{La mauvaise configuration du serveur}\label{sec:configuration-serveur}
 
-    \begin{frame}
-        \frametitle{Mauvaise configuration du serveur}
-        \framesubtitle{Configuration de Nginx ou Apache}
-        \transdissolve
+    \begin{frame}{Mauvaise configuration du serveur}{Configuration de Nginx ou Apache}
         Des données, codes source et fichiers de configuration peuvent-être exposé faute d'une configuration correcte du serveur web.
         \bigbreak
         Example, quand Nginx exécute un fichier \lstinline{*.php} ce n'est pas pareil que s'il est indexé par un serveur web~!
@@ -396,10 +335,7 @@ Access Granted.
         \end{columns}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Mauvaise configuration du serveur}
-        \framesubtitle{Configuration de Nginx ou Apache}
-        \transdissolve
+    \begin{frame}{Mauvaise configuration du serveur}{Configuration de Nginx ou Apache}
         Pour ne pas indexer la configuration et le code source de votre site web, il faut ajouter les lignes suivantes dans la configuration de Nginx ou Apache~:
         \begin{itemize}
             \item Apache~: Rajouter \lstinline{Options -Indexes} dans le fichier \lstinline{.htaccess}.
@@ -411,10 +347,7 @@ Access Granted.
         \includegraphics[width=6cm]{image/php-to-execute}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Mauvaise configuration du serveur}
-        \framesubtitle{Configuration de Nginx ou Apache}
-        \transdissolve
+    \begin{frame}{Mauvaise configuration du serveur}{Configuration de Nginx ou Apache}
         On peut donc accéder aux données en base à partir de fichiers de configuration ou de sources.
         \bigbreak
         On peut parfois accéder \href{https://www.google.com/search?q=intitle\%3A\%22index+of+sqldump\%22}{directement aux données}~:
@@ -423,10 +356,7 @@ Access Granted.
         \includegraphics[width=8cm]{image/dork-sqldump}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Mauvaise configuration du serveur}
-        \framesubtitle{Exercice}
-        \transdissolve
+    \begin{frame}{Mauvaise configuration du serveur}{Exercice}
         Exercice \execcounterdispinc{}~:
         Expliquer quelle(s) mauvaise(s) configuration(s) du serveur peuvent mener à la fuite de données du slide précédent.
         \bigbreak
@@ -436,10 +366,7 @@ Access Granted.
         Quelle information sensible ne doit pas être donnée au \textquote{robots d'indexation}~?
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Mauvaise configuration du serveur}
-        \framesubtitle{Les fichiers de log}
-        \transdissolve
+    \begin{frame}{Mauvaise configuration du serveur}{Les fichiers de log}
         \centering
         \includegraphics[width=12cm]{image/mail-anssi}
     \end{frame}
@@ -448,10 +375,7 @@ Access Granted.
     \section{Développer le serveur applicatif}\label{sec:dev-serveur-applicatif}
 
     \subsection{OAuth 2}\label{subsec:oauth-2}
-    \begin{frame}
-        \frametitle{OAuth2}
-        \framesubtitle{Définition\footnote{OAuth 2.0, \url{https://oauth.net/2/}}}
-        \transdissolve
+    \begin{frame}{OAuth2}{Définition\footnote{OAuth 2.0, \url{https://oauth.net/2/}}}
         \begin{columns}
             \begin{column}{0.6\textwidth}
                 OAuth 2.0 est le protocole de référence dans l'industrie pour l'autorisation.
@@ -466,10 +390,7 @@ Access Granted.
         \end{columns}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{OAuth2}
-        \framesubtitle{Définition\footnote{Qu'est-ce que l'OAuth~? \url{https://www.cloudflare.com/fr-fr/learning/access-management/what-is-oauth/}}}
-        \transdissolve
+    \begin{frame}{OAuth2}{Définition\footnote{Qu'est-ce que l'OAuth~? \url{https://www.cloudflare.com/fr-fr/learning/access-management/what-is-oauth/}}}
         L'OAuth est une norme technique permettant de donner des autorisations aux utilisateurs.
         Il s'agit d'un protocole permettant de transmettre une autorisation d'un service à un autre sans partager les informations d'identification de l'utilisateur, telles qu'un nom d'utilisateur et un mot de passe.
         Avec l'OAuth, un utilisateur peut se connecter à une plateforme, puis être autorisé à effectuer des actions et à consulter des données sur une autre plateforme.
@@ -479,10 +400,7 @@ Access Granted.
         L'OAuth est un des protocoles les plus utilisés.
     \end{frame}
 
-    \begin{frame}
-        \frametitle{OAuth2}
-        \framesubtitle{Différence autorisation authentification}
-        \transdissolve
+    \begin{frame}{OAuth2}{Différence autorisation authentification}
         Exercice \execcounterdispinc{}~:
         Expliquer la différence entre l'authentification et l'autorisation.
         \bigbreak
@@ -494,10 +412,7 @@ Access Granted.
         En se basant sur votre compréhension de l'autorisation, qu'est que l'on ne trouvera dans un serveur OAuth2 comme \url{https://github.com/authlib/example-oauth2-server} et qu'il reste à implémenter~?
     \end{frame}
 
-    \begin{frame}
-        \frametitle{OAuth2}
-        \framesubtitle{OpenID Connect ou OIDC}
-        \transdissolve
+    \begin{frame}{OAuth2}{OpenID Connect ou OIDC}
         C'est une surcouche d'OAuth2 qui ajoute l'authentification.
         Elle n'a pas de point d'API pour les données de l'utilisateur, mais encode les données de l'utilisateur au format JWT~.
         Ce JWT est signé par le serveur OIDC\footnote{Oauth2 vs OpenId Connect, \url{https://www.ilex-international.com/fr/federation-identite/oauth2-vs-openid-connect}}~.
@@ -507,10 +422,7 @@ Access Granted.
         Le client est l'application à laquelle OAuth autorise l'accès.
     \end{frame}
 
-    \begin{frame}
-        \frametitle{OAuth2}
-        \framesubtitle{L'application cliente ou client}
-        \transdissolve
+    \begin{frame}{OAuth2}{L'application cliente ou client}
         Le client n'a besoin que de l'ID du client et du secret du client pour obtenir un token d'accès.
         \bigbreak
         Il doit passer au serveur une URI de redirection, parfois aussi appelée callback URL, pour recevoir le token d'accès.
@@ -525,10 +437,7 @@ Access Granted.
         Des libraries clientes sont disponibles pour les langages de programmation les plus courants.
     \end{frame}
 
-    \begin{frame}
-        \frametitle{OAuth2}
-        \framesubtitle{L'application cliente ou client}
-        \transdissolve
+    \begin{frame}{OAuth2}{L'application cliente ou client}
         De nombreuses offres de SAAS OAuth2 sont disponibles pour les développeurs.
         Parmi elles Auth0 by Oka est un SAAS dédié aux services autour de OAuth2\footnote{Secure access for everyone But not just anyone\url{https://auth0.com/}}.
         \bigbreak
@@ -543,18 +452,12 @@ Access Granted.
         Exercice \execcounterdispinc{}~: Faites des groupes, créez un compte sur Auth0 et connecter l'application Flask \lstinline{flask-banque-dulac-iban.py} à Auth0.
     \end{frame}
 
-    \begin{frame}
-        \frametitle{OAuth2}
-        \framesubtitle{Rappel sur le mécanisme de transfer de Cookie\footnote{Cookie and Session (I): The basic concept, \url{https://medium.com/@alysachan830/cookie-and-session-i-the-basic-concept-fea3d52bc8d3}}}
-        \transdissolve
+    \begin{frame}{OAuth2}{Rappel sur le mécanisme de transfer de Cookie\footnote{Cookie and Session (I): The basic concept, \url{https://medium.com/@alysachan830/cookie-and-session-i-the-basic-concept-fea3d52bc8d3}}}
         \centering
         \includegraphics[width=9cm]{image/cookie-session}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{OAuth2}
-        \framesubtitle{Intégration d'un serveur d'autorisation}
-        \transdissolve
+    \begin{frame}{OAuth2}{Intégration d'un serveur d'autorisation}
         Exercice \execcounterdispinc{}~:
         Toujours en groupe, faites fonctionner le serveur OAuth2 comme indiqué sur \url{https://github.com/authlib/example-oauth2-server} sur une VM Ubuntu ou Debian d'un des clusters Proxmox.
         \bigbreak
@@ -562,10 +465,7 @@ Access Granted.
         \includegraphics[width=6cm]{image/OAuth2-integration.drawio}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{OAuth2}
-        \framesubtitle{Intégration d'un serveur d'autorisation}
-        \transdissolve
+    \begin{frame}{OAuth2}{Intégration d'un serveur d'autorisation}
         Exercice \execcounterdispinc{}~:
         Ajouter l'algorithme de hashage de mot de passe selon les standards de sécurité modernes.
         \bigbreak
@@ -576,10 +476,7 @@ Access Granted.
         \includegraphics[width=6cm]{image/OAuth2-integration.drawio}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{OAuth2}
-        \framesubtitle{Intégration d'un serveur d'autorisation}
-        \transdissolve
+    \begin{frame}{OAuth2}{Intégration d'un serveur d'autorisation}
         Exercice \execcounterdispinc{}~:
         Pour administrer le SSO, créer les users, \textit{etc}.
         Une solution est de créer un comte de type super admin.
@@ -607,10 +504,7 @@ Access Granted.
         \end{columns}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{OAuth2}
-        \framesubtitle{Setup d'un serveur OAuth2 déjà développé}
-        \transdissolve
+    \begin{frame}{OAuth2}{Setup d'un serveur OAuth2 déjà développé}
         Exercice \execcounterdispinc{}~:
         Suivre le tutorial \url{https://www.ory.sh/docs/hydra/5min-tutorial} pour installer ORY Hydra avec Docker.
         \bigbreak
@@ -619,10 +513,7 @@ Access Granted.
     \end{frame}
 
     \subsection{Protection du serveur}\label{subsec:protection-serveur}
-    \begin{frame}
-        \frametitle{Protection du serveur}
-        \framesubtitle{Sécurisation du SSH avec la cryptographie asymétrique}
-        \transdissolve
+    \begin{frame}{Protection du serveur}{Sécurisation du SSH avec la cryptographie asymétrique}
         \begin{footnotesize}
             Pourquoi est-ce plus sécure d'utiliser une clé SSH plutôt qu'un mot de passe~?
             \bigbreak
@@ -651,10 +542,7 @@ Access Granted.
         \end{footnotesize}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Protection du serveur}
-        \framesubtitle{Sécurisation des clés et des secrets}
-        \transdissolve
+    \begin{frame}{Protection du serveur}{Sécurisation des clés et des secrets}
         Que se passe-t-il si une personne malveillante a accès à votre ordinateur~?
         \bigbreak
         Par défaut, quels OS offrent quelles protections des données sur le disque~?
@@ -667,10 +555,7 @@ Access Granted.
         \end{itemize}
     \end{frame}
 
-    \begin{frame}[fragile]
-        \frametitle{Protection du serveur}
-        \framesubtitle{Exemple de sécurisation des clés et des secrets sous Linux}
-        \transdissolve
+    \begin{frame}[fragile]{Protection du serveur}{Exemple de sécurisation des clés et des secrets sous Linux}
         Par défaut, Ubuntu desktop s’installe sur une partition non
         chiffrée (encrypter, ce n’est pas français on dit chiffrer~!~).
         Tout document peut donc être lu avec un disque de
@@ -694,10 +579,7 @@ lrwxrwxrwx 1 chrichri chrichri 28 janv. 14 21:27 /home/chrichri/.ssh -> /home/ch
     \end{frame}
 
 
-    \begin{frame}
-        \frametitle{Protection de la base}
-        \framesubtitle{Exemple de MySQL}
-        \transdissolve
+    \begin{frame}{Protection de la base}{Exemple de MySQL}
         Les configurations par défaut de MySQL sont souvent inadaptées, tant sur le plan de la sécurité que de la performance.
         \bigbreak
         Quels options peuvent être configurées pour sécuriser une base de données MySQL~?
@@ -713,10 +595,7 @@ lrwxrwxrwx 1 chrichri chrichri 28 janv. 14 21:27 /home/chrichri/.ssh -> /home/ch
     \end{frame}
 
     \subsection{Certificat SSL}\label{subsec:certificat-ssl}
-    \begin{frame}
-        \transdissolve
-        \frametitle{Apache et Nginx}
-        \framesubtitle{Exemple de configuration avec un certificat SSL}
+    \begin{frame}{Apache et Nginx}{Exemple de configuration avec un certificat SSL}
         Les standards modernes de sécurité web recommandent très fortement le HTTPS et l'utilisation de certificat SSL~.
         Les clients de votre application en sont demandeur aussi.
         \bigbreak
@@ -732,10 +611,7 @@ lrwxrwxrwx 1 chrichri chrichri 28 janv. 14 21:27 /home/chrichri/.ssh -> /home/ch
         Qu'apporte le certificat SSL à la sécurité de votre application~?
     \end{frame}
 
-    \begin{frame}[fragile]
-        \transdissolve
-        \frametitle{Apache et Nginx}
-        \framesubtitle{Exemple de configuration avec un certificat SSL}
+    \begin{frame}[fragile]{Apache et Nginx}{Exemple de configuration avec un certificat SSL}
         Avec les droits root ou en sudoer, \lstinline{certbot} installe le certificat et modifie la configuration Nginx ou Apache.
 
         La commande suivante~:
@@ -768,10 +644,7 @@ server {
     \end{frame}
 
     \subsection{Cryptographie Asymétrique}\label{subsec:cryptographie-asymetrique}
-    \begin{frame}
-        \frametitle{Cryptographie Asymétrique}
-        \framesubtitle{Très brève introduction\footnote{Initiation à la cryptographie, Gilles Bubertret, 3\textsuperscript{eme} édition, Vuibert}}
-        \transdissolve
+    \begin{frame}{Cryptographie Asymétrique}{Très brève introduction\footnote{Initiation à la cryptographie, Gilles Bubertret, 3\textsuperscript{eme} édition, Vuibert}}
         Deux grandes familles de cryptographie asymétrique~:
         \begin{itemize}
             \item RSA~: Rivest, Shamir, Adleman.
@@ -785,7 +658,7 @@ server {
         \end{itemize}
         \begin{columns}
             \begin{column}{0.8\textwidth}
-                A sécurité égale la taille des clés ECC est plus petite que celle des clés RSA~.
+                A sécurité égale, la taille des clés ECC est plus petite que celle des clés RSA~.
             \end{column}
             \begin{column}{0.2\textwidth}
                 \centering
@@ -795,10 +668,7 @@ server {
     \end{frame}
 
     \subsection{Post-quantum cryptography}\label{subsec:pqc}
-    \begin{frame}
-        \frametitle{Post-quantum cryptography}
-        \framesubtitle{Définition\footnote{Quantum-safe Cryptography Algorithms, \url{https://research.ibm.com/projects/quantum-safe-cryptography}}}
-        \transdissolve
+    \begin{frame}{Post-quantum cryptography}{Définition\footnote{Quantum-safe Cryptography Algorithms, \url{https://research.ibm.com/projects/quantum-safe-cryptography}}}
         Concerne la conception et la mise en œuvre de protocoles qui sont censés être sécurisés contre les capacités de calcul accrues des ordinateurs quantiques.
         Les deux familles quantiques qui posent des problèmes à la cryptographie actuelle sont l'algorithme de Grover et l'algorithme de Shor.
         \bigbreak
@@ -808,21 +678,15 @@ server {
         Pour résister à l'algorithme de Shor, les tailles de clé devraient augmenter de manière exponentielle, ce qui les rendrait pratiquement inutilisables.
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Post-quantum cryptography}
-        \framesubtitle{La vidéo}
-        \transdissolve
+    \begin{frame}{Post-quantum cryptography}{La vidéo}
         Sur le channel Youtube \textquote{IBM Technology}, un super channel~! \url{https://www.youtube.com/watch?v=ecvCfTPRBrI}
         \bigbreak
         \centering
         \includegraphics[width=7cm]{image/man-at-the-cinema-eating pop-corn}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Post-quantum cryptography}
-        \framesubtitle{Les débuts}
+    \begin{frame}{Post-quantum cryptography}{Les débuts}
         \begin{footnotesize}
-            \transdissolve
             Le NIST a lancé un processus de standardisation pour les algorithmes de chiffrement post-quantique (PQC) en 2016.
             Les premiers ont été publiés en 2022.
             Parmi eux, les plus connus, voir prometteurs sont Kyber (clé publique) et Dilithium (signature), poussés en grande partie par IBM, sont deux exemples d'algorithmes de chiffrement post-quantique basé sur les \textquote{lattice} et le \textquote{Learn With Error}.
@@ -838,18 +702,12 @@ server {
     \section{Les impacts}\label{sec:les-impacts}
 
     \subsection{Impact financier direct}\label{subsec:impact-financier-direct}
-    \begin{frame}
-        \frametitle{Impact financier direct}
-        \framesubtitle{Réglementaire\footnote{Sanctions et mesures correctrices : la CNIL présente le bilan 2023 de son action répressive ~: \url{https://www.cnil.fr/fr/sanctions-et-mesures-correctrices-la-cnil-presente-le-bilan-2023-de-son-action-repressive}}}
-        \transdissolve
+    \begin{frame}{Impact financier direct}{Réglementaire\footnote{Sanctions et mesures correctrices : la CNIL présente le bilan 2023 de son action répressive ~: \url{https://www.cnil.fr/fr/sanctions-et-mesures-correctrices-la-cnil-presente-le-bilan-2023-de-son-action-repressive}}}
         \centering
         \includegraphics[width=11cm]{image/sanctions-cnil-2023}
     \end{frame}
 
-    \begin{frame}
-        \frametitle{Impact financier direct}
-        \framesubtitle{Détournement de moyens monétiques}
-        \transdissolve
+    \begin{frame}{Impact financier direct}{Détournement de moyens monétiques}
         Un backend stock directement ou indirectement des secrets comme des clés d'API (Stripe, \textit{etc}), des données financières sensibles.
         \begin{itemize}
             \item Hack de Stripe~: 70 k\$ détournés à une web designeuse\footnote{My Stripe Account Was Hacked and Stripe Said I Have To Repay \$70K, \url{https://webdesigneracademy.com/my-stripe-account-was-hacked-and-stripe-said-i-have-to-repay-70k/}}.
@@ -858,10 +716,7 @@ server {
     \end{frame}
 
     \subsection{Le risque réputationnel}\label{subsec:risque-reputationnel}
-    \begin{frame}
-        \frametitle{Risque réputationnel}
-        \framesubtitle{La rigueur s'impose dans certains domaines}
-        \transdissolve
+    \begin{frame}{Risque réputationnel}{La rigueur s'impose dans certains domaines}
         \textit{Normalement} un acteur sensible (finance, défense, santé) du numérique qui voit ses données fuirent devrait disparaître\ldots
         \begin{itemize}
             \item Flow Bank~: Flow bank victime de vol de données, le régulateur ferme la banque moins d'un an plus tard\footnote{Des hackers ont accédé aux données client d’une banque en ligne, \url{https://www.20min.ch/fr/story/des-hackers-ont-accede-aux-donnees-client-dune-banque-en-ligne-736748131987}}\footnotestep\footnote{Faillite d’une banque suisse~: Entre fraude et dissimulation, découvrez les révélations chocs~!, \url{https://moneyradar.org/articles-economie-societe/fin-de-flowbank-entre-fraude-dissimulation-et-faillite-decouvrez-les-revelations-chocs/}}.
