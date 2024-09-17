@@ -35,6 +35,73 @@
     \end{frame}
 
 
+    \section{Évaluation}\label{sec:evaluation}
+    \begin{frame}{Évaluation}
+        \begin{itemize}
+            \item 60 \% sur les projets développés au cours du module.
+            \begin{itemize}
+                \item Basée en partie sur les commits des développements pour comprendre facilement l'évolution du code.
+                \item Les exercices doivent être terminés dans les temps et les livrables dans Teams.
+            \end{itemize}
+            \item 40 \% sur une évaluation écrite finale.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Intervenant sur le module Data Security}{Christophe Brun, conseil en développement informatique}
+
+        \begin{columns}
+            \column{0.7\textwidth}
+            \begin{itemize}
+                \item 2\textsuperscript{nde} année d'intervenant à Saint-Michel \emoji{star-struck}.
+
+                \item 7 ans de conseil en développement au sein d'SSII~.
+
+                \item 7 ans de conseil en développement à mon compte \href{https://papit.fr}{PapIT}.
+
+                \item Passionné~!
+                \bigbreak
+                \begin{columns}
+                    \column{0.5\textwidth}
+                    \centering
+                    \includegraphics[width=3cm]{image/logo-uppa}
+                    \column{0.5\textwidth}
+                    \centering
+                    \includegraphics[width=3cm]{image/logo-universite-bordeaux}
+                \end{columns}
+            \end{itemize}
+            \column{0.3\textwidth}
+            \centering
+            \includegraphics[width=5cm]{image/trombine-christophe}
+        \end{columns}
+    \end{frame}
+
+
+    \section{Les impacts}\label{sec:les-impacts}
+
+    \subsection{Impact financier direct}\label{subsec:impact-financier-direct}
+    \begin{frame}{Impact financier direct}{Réglementaire\footnote{Sanctions et mesures correctrices~: la CNIL présente le bilan 2023 de son action répressive ~: \url{https://www.cnil.fr/fr/sanctions-et-mesures-correctrices-la-cnil-presente-le-bilan-2023-de-son-action-repressive}}}
+        \centering
+        \includegraphics[width=11cm]{image/sanctions-cnil-2023}
+    \end{frame}
+
+    \begin{frame}{Impact financier direct}{Détournement de moyens monétiques}
+        Un backend stock directement ou indirectement des secrets comme des clés d'API (Stripe, \textit{etc}), des données financières sensibles.
+        \begin{itemize}
+            \item Hack de Stripe~: 70 k\$ détournés à une web designeuse\footnote{My Stripe Account Was Hacked and Stripe Said I Have To Repay \$70K, \url{https://webdesigneracademy.com/my-stripe-account-was-hacked-and-stripe-said-i-have-to-repay-70k/}}.
+            \item Vol de coordonnées de cartes de crédit dans un plugin Prestashop payant \footnote{Facebook PrestaShop module exploited to steal credit cards, \url{https://www.bleepingcomputer.com/news/security/facebook-prestashop-module-exploited-to-steal-credit-cards/}}.
+        \end{itemize}
+    \end{frame}
+
+    \subsection{Le risque réputationnel}\label{subsec:risque-reputationnel}
+    \begin{frame}{Risque réputationnel}{La rigueur s'impose dans certains domaines}
+        \textit{Normalement} un acteur sensible (finance, défense, santé) du numérique qui voit ses données fuirent, devrait disparaître\ldots
+        \begin{itemize}
+            \item Flow Bank~: Flow bank victime de vol de données, le régulateur ferme la banque moins d'un an plus tard\footnote{Des hackers ont accédé aux données client d’une banque en ligne, \url{https://www.20min.ch/fr/story/des-hackers-ont-accede-aux-donnees-client-dune-banque-en-ligne-736748131987}}\footnotestep\footnote{Faillite d’une banque suisse~: Entre fraude et dissimulation, découvrez les révélations chocs~!, \url{https://moneyradar.org/articles-economie-societe/fin-de-flowbank-entre-fraude-dissimulation-et-faillite-decouvrez-les-revelations-chocs/}}.
+            \item Crédit Suisse~: Crédit Suisse, qui blanchit l'argent du traffic de drogue et disparaît un an plus tard\footnote{Data Leak Shows Credit Suisse’s Criminal Clientele, Bank Denies Wrongdoings, \url{https://www.financemagnates.com/institutional-forex/data-leak-shows-credit-suisses-criminal-clientele-bank-denies-wrongdoings/}}.
+        \end{itemize}
+    \end{frame}
+
+
     \section{Les vecteurs d'attaque}\label{sec:les-vecteurs-dattaque}
 
     \subsection{Le buffer overflow}\label{subsec:les-buffer-overflow}
@@ -197,6 +264,32 @@ Access Granted.
         \bigbreak
         Exercice \execcounterdispinc{}~:
         Comment Rust prévient les buffers overflow~?
+    \end{frame}
+
+    \begin{frame}{Buffer Overflow}{Ghidra}
+        La décompilation/désassemblage d'un binaire est toujours possible.
+        Elle peut se faire en assembleur ou dans un langage plus haut niveau comme C.
+        \bigbreak
+        Ghidra \textit{A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission}\footnote{Ghidra, \url{https://ghidra-sre.org/}} permet de décompiler un C.
+        C'est un framework très populaire en reverse engineering depuis sa libération 2019.
+        Il vient faire de l'ombre à IDA, un software propriétaire, leader avant l'arrivée de Ghidra.
+        \bigbreak
+        \centering
+        \includegraphics[width=4cm]{image/GHIDRA}
+    \end{frame}
+
+    \begin{frame}{Buffer Overflow}{Ghidra}
+        Ces frameworks peuvent être utilisés pour trouver des vulnérabilités du type buffer overflow dans votre stack, vos programmes, par des experts en cybersécurité dûment mandatés ou des personnes malveillantes.
+        \bigbreak
+        Exercice \execcounterdispinc{}~:
+        \begin{itemize}
+            \item Installer Ghidra.
+            \item Lancer Ghidra et ouvrir les binaires \href{https://github.com/St-Michel-IT/data-security/blob/main/mystery-bin-1}{mystery-bin-1} et \href{https://github.com/St-Michel-IT/data-security/blob/main/mystery-bin-2}{mystery-bin-2}.
+            Ces binaires sont issus de codes similaires à ceux vus précédemment vérifiant les mots de passe.
+            \item Comparer les 2 sources, en vous basant sur le mécanisme de protection contre les buffer overflow vu précédemment, trouver lequel est vulnérable et lequel ne l'est pas.
+            \item Déposer un rapport sur Teams expliquant quel binaire est vulnérable et pourquoi, lequel est safe.
+            Avec les morceaux de code qui vont font dire cela et des captures d'écran.
+        \end{itemize}
     \end{frame}
 
     \subsection{Supply chain attack}\label{subsec:supply-chain-attack}
@@ -813,32 +906,6 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQ8z4... chrichri@localhost" >> ~/.s
         \end{columns}
         \bigbreak
         Le serveur doit fonctionner avec l'application Google Authenticator.
-    \end{frame}
-
-
-    \section{Les impacts}\label{sec:les-impacts}
-
-    \subsection{Impact financier direct}\label{subsec:impact-financier-direct}
-    \begin{frame}{Impact financier direct}{Réglementaire\footnote{Sanctions et mesures correctrices~: la CNIL présente le bilan 2023 de son action répressive ~: \url{https://www.cnil.fr/fr/sanctions-et-mesures-correctrices-la-cnil-presente-le-bilan-2023-de-son-action-repressive}}}
-        \centering
-        \includegraphics[width=11cm]{image/sanctions-cnil-2023}
-    \end{frame}
-
-    \begin{frame}{Impact financier direct}{Détournement de moyens monétiques}
-        Un backend stock directement ou indirectement des secrets comme des clés d'API (Stripe, \textit{etc}), des données financières sensibles.
-        \begin{itemize}
-            \item Hack de Stripe~: 70 k\$ détournés à une web designeuse\footnote{My Stripe Account Was Hacked and Stripe Said I Have To Repay \$70K, \url{https://webdesigneracademy.com/my-stripe-account-was-hacked-and-stripe-said-i-have-to-repay-70k/}}.
-            \item Vol de coordonnées de cartes de crédit dans un plugin Prestashop payant \footnote{Facebook PrestaShop module exploited to steal credit cards, \url{https://www.bleepingcomputer.com/news/security/facebook-prestashop-module-exploited-to-steal-credit-cards/}}.
-        \end{itemize}
-    \end{frame}
-
-    \subsection{Le risque réputationnel}\label{subsec:risque-reputationnel}
-    \begin{frame}{Risque réputationnel}{La rigueur s'impose dans certains domaines}
-        \textit{Normalement} un acteur sensible (finance, défense, santé) du numérique qui voit ses données fuirent, devrait disparaître\ldots
-        \begin{itemize}
-            \item Flow Bank~: Flow bank victime de vol de données, le régulateur ferme la banque moins d'un an plus tard\footnote{Des hackers ont accédé aux données client d’une banque en ligne, \url{https://www.20min.ch/fr/story/des-hackers-ont-accede-aux-donnees-client-dune-banque-en-ligne-736748131987}}\footnotestep\footnote{Faillite d’une banque suisse~: Entre fraude et dissimulation, découvrez les révélations chocs~!, \url{https://moneyradar.org/articles-economie-societe/fin-de-flowbank-entre-fraude-dissimulation-et-faillite-decouvrez-les-revelations-chocs/}}.
-            \item Crédit Suisse~: Crédit Suisse, qui blanchit l'argent du traffic de drogue et disparaît un an plus tard\footnote{Data Leak Shows Credit Suisse’s Criminal Clientele, Bank Denies Wrongdoings, \url{https://www.financemagnates.com/institutional-forex/data-leak-shows-credit-suisses-criminal-clientele-bank-denies-wrongdoings/}}.
-        \end{itemize}
     \end{frame}
 
 
