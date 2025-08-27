@@ -2,3 +2,6 @@ flask
 pyre-check
 fb-sapp
 checkmytex
+bcrypt
+plotly
+numpy

@@ -101,7 +101,7 @@
     \begin{frame}{Risque réputationnel}{La rigueur s'impose dans certains domaines}
         \textit{Normalement} un acteur sensible (finance, défense, santé) du numérique qui voit ses données fuirent, devrait disparaître\ldots
         \begin{itemize}
-            \item Flow Bank~: Flow bank victime de vol de données, le régulateur ferme la banque moins d'un an plus tard\footnote{Des hackers ont accédé aux données client d’une banque en ligne, \url{https://www.20min.ch/fr/story/des-hackers-ont-accede-aux-donnees-client-dune-banque-en-ligne-736748131987}}\footnotestep\footnote{Faillite d’une banque suisse~: Entre fraude et dissimulation, découvrez les révélations chocs~!, \url{https://moneyradar.org/articles-economie-societe/fin-de-flowbank-entre-fraude-dissimulation-et-faillite-decouvrez-les-revelations-chocs/}}.
+            \item Flow Bank~: Flow bank victime de vol de données, le régulateur ferme la banque moins d'un an plus tard\footnote{Des hackers ont accédé aux données clients d’une banque en ligne, \url{https://www.20min.ch/fr/story/des-hackers-ont-accede-aux-donnees-client-dune-banque-en-ligne-736748131987}}\footnotestep\footnote{Faillite d’une banque suisse~: Entre fraude et dissimulation, découvrez les révélations chocs~!, \url{https://moneyradar.org/articles-economie-societe/fin-de-flowbank-entre-fraude-dissimulation-et-faillite-decouvrez-les-revelations-chocs/}}.
             \item Crédit Suisse~: Crédit Suisse, qui blanchit l'argent du traffic de drogue et disparaît un an plus tard\footnote{Data Leak Shows Credit Suisse’s Criminal Clientele, Bank Denies Wrongdoings, \url{https://www.financemagnates.com/institutional-forex/data-leak-shows-credit-suisses-criminal-clientele-bank-denies-wrongdoings/}}.
         \end{itemize}
     \end{frame}
@@ -179,7 +179,7 @@ Abandon (core dumped)
         Expliquer ce qui se passe dans ces cas~?
         \pause
         \bigbreak
-        \lstinline{stack smashing detected} veut dire que GCC a détecté un buffer overflow et fait crasher le programme de manière préventive.
+        \lstinline{stack smashing detected} veut dire que grâce à un mécanisme de protection fournit par GCC, l'OS a détecté un buffer overflow et fait crasher le programme de manière préventive.
         Il parle de la stack, car c'est dans cette mémoire que les variables locales sont stockées.
     \end{frame}
 
@@ -350,6 +350,15 @@ Access Granted.
         \end{dangercolorbox}
     \end{frame}
 
+    \begin{frame}{Supply chain attack}{Exercice \execcounterdispinc}
+        Développer en un nombre de lignes/caractères minimum, en JavaScript, les fonctions \lstinline{isOdd} et \lstinline{isEven}.
+        \bigbreak
+        Que pensez-vous de la balance bénéfice/risque de ces packages~?
+        \bigbreak
+        \centering
+        \includegraphics[width=5cm]{image/5-odd-or-even}
+    \end{frame}
+
     \begin{frame}{Supply chain attack}{Remédiations~: Les outils de scanning\cref{snyk2023}}
         Diminution globale peut être dûe aux outils de scanning, SonarQube, CodeQL, Docker Desktop, NPM, \textit{etc}.
         \bigbreak
@@ -375,7 +384,7 @@ Access Granted.
     \subsection{Path Traversal}\label{path-traversal}
 
 
-    \begin{frame}{Path Traversal}{définition\footnote{Path Traversal\url{https://owasp.org/www-community/attacks/Path_Traversal}}}
+    \begin{frame}{Path Traversal}{définition\footnote{Path Traversal, \url{https://owasp.org/www-community/attacks/Path_Traversal}}}
         Cette attaque vise à accéder à des fichiers et répertoires qui sont stockés en dehors du dossier racine du site web ou censés être hors des droits de l'attaquant.
         En manipulant des variables qui font références à des fichiers avec des chemins \textquote{dot-dot-slash \lstinline{../}} et ses variations ou en utilisant des chemins de fichiers absolus, il peut être possible d'accéder à des fichiers et répertoires arbitraires stockés sur le système de fichiers, y compris le code source de l'application ou des fichiers de configuration et des données sensibles.
         L'OS et ses droits ont un rôle à jouer, car l'attaquant a les droits du serveur web.
@@ -386,7 +395,7 @@ Access Granted.
     \begin{frame}{Path Traversal}{Examples}
         Tout le monde est ou a été touché~:
         \begin{itemize}
-            \item Nginx si on oublie le trailing slash dans la configuration\footnote{nginx alias misconfiguration allowing path traversal , \url{https://davidhamann.de/2022/08/14/nginx-alias-traversal/}}.
+            \item Nginx si on oublie le trailing slash dans la configuration\footnote{nginx alias misconfiguration allowing path traversal, \url{https://davidhamann.de/2022/08/14/nginx-alias-traversal/}}.
             \item Apache en 2021, Path Traversal menant à une RCE \emoji{face-screaming-in-fear}\footnote{Apache HTTP Server Path Traversal \& Remote Code Execution (CVE-2021-41773 \& CVE-2021-42013), \url{https://blog.qualys.com/vulnerabilities-threat-research/2021/10/27/apache-http-server-path-traversal-remote-code-execution-cve-2021-41773-cve-2021-42013}}.
             \item Dans \lstinline{node-static}, un serveur de fichiers statiques\footnote{Directory Traversal, \url{https://security.snyk.io/vuln/SNYK-JS-NODESTATIC-3149928}}.
             \item Many more\ldots
@@ -461,6 +470,7 @@ Access Granted.
         Exercice \execcounterdispinc{}~:
         Quels fichiers de configuration des \textquote{robots d'indexation} peuvent être utilisés pour ajouter une couche de sécurité et limiter en théorie l'indexation de fichiers sensibles~?
         Exercice \execcounterdispinc{}~:
+        \bigbreak
         Quelle information sensible ne doit pas être donnée au \textquote{robots d'indexation}~?
     \end{frame}
 
@@ -537,7 +547,7 @@ Access Granted.
 
     \begin{frame}{OAuth2}{L'application cliente ou client}
         De nombreuses offres de SAAS OAuth2 sont disponibles pour les développeurs.
-        Parmi elles Auth0 by Oka est un SAAS dédié aux services autour de OAuth2\footnote{Secure access for everyone But not just anyone\url{https://auth0.com/}}.
+        Parmi elles Auth0 by Okta est un SAAS dédié aux services autour de OAuth2\footnote{Secure access for everyone But not just anyone, \url{https://auth0.com/}}.
         \bigbreak
         C'est la partie serveur du protocole.
         Auth0 tente d'abstraire la complexité du protocole et l'instanciation d'un serveur OAuth2.
@@ -553,6 +563,33 @@ Access Granted.
     \begin{frame}{OAuth2}{Rappel sur le mécanisme de transfer de Cookie\footnote{Cookie and Session (I): The basic concept, \url{https://medium.com/@alysachan830/cookie-and-session-i-the-basic-concept-fea3d52bc8d3}}}
         \centering
         \includegraphics[width=9cm]{image/cookie-session}
+    \end{frame}
+
+    \begin{frame}{OAuth2}{Access Token\footnote{\label{auth0-tokens}ID Token and Access Token: What's the Difference~?, \url{https://auth0.com/blog/id-token-access-token-what-is-the-difference/}}}
+        De base dans OAuth2, plusieurs formats de token sont possibles.
+        \begin{itemize}
+            \item \textbf{Utilisation}~: Autoriser l'accès aux ressources protégées (API, services).
+            \item \textbf{Contenu}~: Informations sur les permissions et les ressources accessibles.
+            \item \textbf{Audience}~: Destiné aux API et serveurs de ressources.
+            \item \textbf{Durée de vie}~: Courte durée pour des raisons de sécurité.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{OAuth2}{ID Token\cref{auth0-tokens}}
+        Propre à OpenID Connect (OIDC) la couche d'identification au dessus de OAuth 2 et non à OAuth2.
+        \bigbreak
+        \begin{columns}
+            \column{0.6\textwidth}
+            \begin{itemize}
+                \item \textbf{Utilisation}~: Authentifier l'utilisateur et fournir des informations sur son identité.
+                \item \textbf{Contenu}~: Informations sur l'utilisateur (nom, email, etc.) et détails de l'authentification.
+                \item \textbf{Audience}~: Destiné aux clients (applications) pour vérifier l'identité de l'utilisateur.
+                \item \textbf{Durée de vie}~: Peut être plus longue que celle des access tokens.
+            \end{itemize}
+            \column{0.4\textwidth}
+            \centering
+            \includegraphics[width=5cm]{image/which-token}
+        \end{columns}
     \end{frame}
 
     \begin{frame}{OAuth2}{Intégration d'un serveur d'autorisation}
@@ -574,6 +611,106 @@ Access Granted.
         \includegraphics[width=6cm]{image/OAuth2-integration.drawio}
     \end{frame}
 
+
+    \begin{frame}{Implémentation d'un algorithme de hashage}{Pourquoi un mot de passe doit être hashé}
+        \begin{itemize}
+            \item Un mot de passe en clair est lisible si la base de données est compromise, c'est à proscrire.
+            \item Le hashage est une fonction unidirectionnelle~: on ne peut pas retrouver le mot de passe original.
+            \item Le chiffrement peut être inversé si la clé est connue, le hashage non.
+            \item En cas de fuites de données, les informations pour régénérer le mot de passe ne sont dans la machine.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Implémentation d'un algorithme de hashage}{Implémentation d'un algorithme de hashage}{Recommandation sur les algorithme de hashage}
+        \centering
+        \includegraphics[width=8cm]{image/real-password-cracking} \\ Hashcat benchmark\footnotemark \\
+        \footnotetext{Those Tables With Password Cracking Times That Scare You And Peddle Snake Oil — Are Mostly Wrong!, \url{https://billatnapier.medium.com/those-tables-password-cracking-times-that-scare-you-are-mostly-wrong-7d03bf4aec6}}
+    \end{frame}
+
+    \begin{frame}{Implémentation d'un algorithme de hashage}{Qu'est-ce qu'un sel~?}
+        \begin{itemize}
+            \item Un \textbf{sel} est une valeur aléatoire ajoutée au mot de passe avant le hashage.
+            \item Il rend chaque hashage unique, même pour deux mots de passe identiques.
+            \item Il empêche les attaques par \textit{rainbow tables} (tables de hashage pré-calculées).
+            \item Le sel est généralement stocké avec le hashage.
+            \item Certains algorithmes comme Bcrypt ont, par défaut, le sel qui est formaté à l'intérieur du résultat du hash.
+            Cela permet de ne pas le stocker dans la base (avoir un schéma légèrement plus simple) et surtout de faciliter son utilisation, car il est toujours là~!
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Implémentation d'un algorithme de hashage}{Le nombre de rounds (itérations)}
+        \begin{itemize}
+            \item Le hashage doit être répété plusieurs fois pour prendre un temps quelques millisecondes~: ce sont les \textbf{rounds}.
+            \item Plus il y a de rounds, plus le calcul est long.
+            \item Cela ralentit les attaques par force brute ou dictionnaire.
+            \item Des algorithmes comme Bcrypt, Scrypt ou Argon2 permettent de configurer ce paramètre.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{Implémentation d'un algorithme de hashage}{Exemple en Python avec Bcrypt du package \lstinline{bcrypt}}
+        \begin{lstlisting}[language=Bash]
+import bcrypt
+# Step 1: Your password (must be bytes)
+password = b"my_secure_password"
+# Step 2: Define number of rounds (cost factor)
+cost = 14  # You can adjust this (e.g., 10, 12, 14). Higher = more secure & slower
+# Step 3: Generate salt with the cost factor
+salt = bcrypt.gensalt(rounds=cost)
+# Step 4: Hash the password with the generated salt
+hashed = bcrypt.hashpw(password, salt)
+# Step 5: Output the result
+print("Hashed password (includes salt and cost):", hashed.decode())
+# Step 6: Verifying later
+if bcrypt.checkpw(password, hashed):
+    print("✅ Password is correct.")
+else:
+    print("❌ Password is incorrect.")
+Hashed password (includes salt and cost): $2b$14$xRoWpVV3QfZ6Re4WjA86DetuUvSMi5Gr7RFxTw3D2XD4/KlGsiJEW
+✅ Password is correct.
+        \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}[fragile]{Implémentation d'un algorithme de hashage}{Exemple en Python avec PDKDF2}
+        \begin{lstlisting}[language=Bash]
+import secrets
+import hashlib
+import base64
+import hmac
+# === Paramètres de configuration ===
+password = b"mon_mot_de_passe"
+iterations = 100_000
+salt_size = 16
+hash_name = "sha256"
+dklen = 32
+# === Génération sécurisée du salt avec secrets ===
+salt = secrets.token_bytes(salt_size)
+# === Calcul du hash PBKDF2 ===
+hash_bytes = hashlib.pbkdf2_hmac(hash_name, password, salt, iterations, dklen)
+# === Encodage en base64 pour stockage
+hash_b64 = base64.b64encode(hash_bytes).decode()
+print("Hash stocké~:", hash_b64)
+Hash stocké~: do8a86L5pd16mBu581z9Pa8lv0awIoI9Xowj591PdjM=
+        \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}[fragile]{Implémentation d'un algorithme de hashage}{Exemple en Python avec PDKDF2}
+        \begin{lstlisting}[language=Bash]
+def verify_password(input_password: bytes, stored_hash: str) -> bool:
+    original_hash = base64.b64decode(hash_b64)
+    # Recalcul du hash
+    test_hash = hashlib.pbkdf2_hmac(hash_name, input_password, salt, iterations, dklen=len(original_hash))
+    # Comparaison sécurisée
+    return hmac.compare_digest(original_hash, test_hash)
+# === Exemple d'utilisation ===
+if verify_password(b"mon_mot_de_passe", hash_b64):
+    print("✅ Mot de passe valide")
+else:
+    print("❌ Mot de passe invalide")
+✅ Mot de passe valide
+        \end{lstlisting}
+    \end{frame}
+
+
     \begin{frame}{OAuth2}{Intégration d'un serveur d'autorisation}
         Exercice \execcounterdispinc{}~:
         Pour administrer le SSO, créer les users, \textit{etc}.
@@ -591,7 +728,7 @@ Access Granted.
                 \begin{itemize}
                     \item Allowed Scope~: \lstinline{openid profile}.
                     \item Allowed Response Types~: \lstinline{code}.
-                    \item Allowed Grant Types: \lstinline{authorization_code}.
+                    \item Allowed Grant Types~: \lstinline{authorization_code}.
                     \item Token Endpoint Auth Method~: \lstinline{client_secret_basic}.
                 \end{itemize}
             \end{column}
@@ -608,6 +745,112 @@ Access Granted.
         \bigbreak
         Exercice \execcounterdispinc{}~:
         Suivre le tutorial \url{https://www.keycloak.org/getting-started/getting-started-docker} pour installer Keycloak et sécuriser une app via OAuth2.
+    \end{frame}
+
+
+    \section{MFA}\label{sec:mfa}
+
+    \begin{frame}{Authentification MultiFacteur (MAF)}
+        \begin{itemize}
+            \item La MAF renforce la sécurité en nécessitant plusieurs facteurs d'authentification.
+            \item Elle est souvent combinée avec des OTP (One-Time Passwords) pour ajouter une couche de protection supplémentaire.
+            \item Exemple~: 2FA (authentification à deux facteurs) où l'utilisateur fournit un mot de passe et un code temporaire, \textit{i.e.}, le OTP.
+            \item Le premier facteur est généralement quelque chose que l'utilisateur connait (mot de passe).
+            \item La 2FA peut s'intégrer à OAuth2 après l'étape de vérification du mot de passe.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{TOTP et HOTP}
+        \begin{itemize}
+            \item TOTP (Time-based One-Time Password)~: basé sur le temps, renouvelé périodiquement.
+            Toutes les 30 secondes par défaut pour Google Authenticator.
+            \item HOTP (HMAC-based OTP)~: basé sur un compteur incrémental.
+            \item TOTP est utilisé dans de nombreuses applications de sécurité, car il est synchronisé avec l'horloge système, augmentant ainsi la sécurité.
+            \item HOTP est utilisé dans des applications où la synchronisation de l'horloge n'est pas possible, dans les envois de code par mail ou SMS.
+            \item Le device (smartphone, tablette) qui génère le mot de passe peut être offline.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Adoption et popularité des applications de TOTP\footnote{10 Most Popular Two-Factor Authentication Apps Compared, \url{https://www.protectimus.com/blog/10-most-popular-2fa-apps-on-google-play/}}}
+        \begin{tiny}
+            \begin{tabular}{p{2cm} p{4.5cm} p{4.5cm}}
+                \hline
+                \textbf{Application}    & \textbf{Fonctionnalités clés}                                                                                                                                                                                                                                              & \textbf{Limites / Inconvénients}                                                                                                                              \\                                                                                                                                                       \\
+                \hline
+                Google Authenticator & Interface très simple, supporte TOTP et HOTP, fonctionne hors réseau, permet plusieurs comptes sur une seule appli. & Pas de sauvegarde intégrée, affichage limité à environ 4 comptes par écran.\\
+                \hline
+                Protectimus Smart OTP & Sauvegarde cloud chiffrée, transfert de tokens, import depuis Google Authenticator, authentification biométrique et PIN, support HOTP/TOTP/OCRA, code 6 ou 8 chiffres, organisation par dossiers et emojis, notifications push, signature de données (CWYS), multi-langue. & \\
+                \hline
+                Authy & Version desktop, sauvegarde cloud, PIN principal, synchronisation multi-appareils. & Certaines fonctionnalités via SMS (moins sûr), risque lié à la synchronisation multi-appareils, migration depuis une autre appli demande un smartphone rooté. \\
+                \hline
+                Microsoft Authenticator & Génération de codes / OAuth, notifications push \textquote{Verify/Deny}. & Problèmes signalés de fonctionnement et échange de données, pas de sauvegarde, affichage limité à environ 4 comptes à la fois. \\
+                \hline
+                FreeOTP Authenticator & Open-source, très léger (~500 KB), supporte HOTP et TOTP, compatible avec de nombreux services. & Interface peu ergonomique, pas de sauvegarde ni version desktop. \\
+                \hline
+                Sophos Authenticator & Supporte TOTP/HOTP, divers algorithmes (SHA-1/256/512), durée de code personnalisable, codes 6 ou 8 chiffres. & Pas de sauvegarde, problèmes signalés avec VPN et RADIUS. \\
+                \hline
+            \end{tabular}
+        \end{tiny}
+        \begin{footnotesize}
+            \begin{dangercolorbox}
+                Pas de données sur le nombre de téléchargements dans un des stores, donc à prendre avec des pincettes\ldots
+            \end{dangercolorbox}
+        \end{footnotesize}
+    \end{frame}
+
+    \begin{frame}{Adoption et popularité des applications de TOTP}
+        Google / Microsoft Authenticator sont compatibles avec les \href{https://tools.ietf.org/html/rfc6238}{RFC 6238} pour TOTP et \href{https://tools.ietf.org/html/rfc4226}{RFC 4226} pour HOTP\footnote{Google Authenticator OpenSource, \url{https://github.com/google/google-authenticator}}.
+        \bigbreak
+        Qu'est-ce que cela implique~?
+        \pause
+        \bigbreak
+        \begin{columns}
+            \column{0.6\textwidth}
+            \begin{itemize}
+                \item Les applications mobiles, donc côté client, sont compatibles, interchangeables.
+                Essayez avec \url{https://elogic.synology.me/TestAuthenticator/}
+                \item Les packages côté backend le sont aussi~!
+            \end{itemize}
+            \column{0.4\textwidth}
+            \centering
+            \includegraphics[width=4cm]{image/protocols-satisfying}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{Exercice \execcounterdispinc{} sur TOTP}
+        Ajouter au serveur déjà développé l'authentification TOTP compatible avec l'application mobile Google Authenticator.
+        \bigbreak
+        \begin{columns}
+            \column{0.6\textwidth}
+            En Python, les librairies conseillées~:
+            \begin{itemize}
+                \item \href{https://pyauth.github.io/pyotp/}{PyOTP}
+                \item \href{https://pythonhosted.org/PyQRCode/}{PyQRCode}
+            \end{itemize}
+            Les livrables sont le code et dans un document de synthèse, un diagramme de séquence UML qui contient~:
+            \begin{itemize}
+                \item Tous les échanges entre l'utilisateur et le serveur.
+                \item Les méthodes HTTP.
+                \item Les Content-Types des requêtes HTTP entrantes et sortantes.
+            \end{itemize}
+            \column{0.4\textwidth}
+            \begin{center}
+                \includegraphics[width=4cm]{image/totp-server.drawio}
+            \end{center}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{Exercice \execcounterdispinc{} sur HOTP}
+        À l'image de certaines applications dont la connexion est plus \textit{lean} sans mot de passe (\textit{subjectif...}) comme airbnb, AliExpress, qui se basent sur l'authentification du moyen de paiement et la sécurité de la boîte mail.
+        Développez une application qui envoie un code HOTP par mail à la personne en cours de login.
+        \bigbreak
+        En Python, les librairies conseillées~:
+        \begin{itemize}
+            \item \href{https://pyauth.github.io/pyotp/}{PyOTP}
+            \item \href{https://flask.palletsprojects.com/en/stable/}{Flask}
+            \item Une API de mails transactionnels gratuite pour les développeurs ou étudiants.
+            \item Stockez le compteur et l'adresse mail dans une base \href{SQL}{https://docs.python.org/3/library/sqlite3.html}.
+        \end{itemize}
     \end{frame}
 
     \subsection{Protection du serveur}\label{subsec:protection-serveur}
@@ -633,9 +876,6 @@ Access Granted.
                     \includegraphics[width=5cm]{image/ssh-key-diagram} \\ Foxpass\footnotemark \\
                 \end{column}
             \end{columns}
-            \flushleft
-            Exercice \execcounterdispinc{}~:
-            Restreindre l'accès à la VM au SSH avec une clé SSH, aucun mot de passe.
             \footnotetext{Learn SSH Keys in Minutes, \url{https://www.foxpass.com/blog/learn-ssh-keys-in-minutes/}}
         \end{footnotesize}
     \end{frame}
@@ -649,13 +889,13 @@ Access Granted.
         \begin{itemize}
             \item Windows~: BitLocker, n'a pas bonne réputation et dépend de l'implémentation, voir \url{https://www.youtube.com/watch?v=wTl4vEednkQ}.
             \item MacOS~: FileVault.
-            \item Linux~: LUKS, \lstinline{ecryptfs-utils}, YubiKey, encryption du disque dès l'installation, \textit{etc}.
+            \item Linux~: LUKS, \lstinline{ecryptfs-utils}, YubiKey, chiffrement du disque dès l'installation, \textit{etc}.
         \end{itemize}
     \end{frame}
 
     \begin{frame}[fragile]{Protection du serveur}{Exemple de sécurisation des clés et des secrets sous Linux}
         Par défaut, Ubuntu desktop s’installe sur une partition non
-        chiffrée (encrypter, ce n’est pas français on dit chiffrer~!~).
+        chiffrée (encrypter, ce n’est pas français, on dit chiffrer~!~).
         Tout document peut donc être lu avec un disque de
         démarrage (live CD, USB bootable, etc) ou si le disque dur
         est extrait et lu.
@@ -687,7 +927,7 @@ lrwxrwxrwx 1 chrichri chrichri 28 janv. 14 21:27 /home/chrichri/.ssh -> /home/ch
         \begin{itemize}
             \item \lstinline{skip-networking}~: Désactive les connexions TCP/IP.
             Elle limite les connexions aux clients sur l'hôte local.
-            \item \lstinline{require_secure_transport}~: Qui oblige les connexions à utiliser un chiffrement SSL/TLS et l'usage de certificats ou alors d'un Unix Domain Socket.
+            \item \lstinline{require_secure_transport}~: Qui oblige les connexions à utiliser un chiffrement SSL/TLS et l'usage de certificats ou alors, d'un Unix Domain Socket.
         \end{itemize}
         C'est quoi un Unix Domain Socket~?
     \end{frame}
@@ -796,6 +1036,145 @@ server {
         \end{footnotesize}
     \end{frame}
 
+    \begin{frame}{Post-quantum cryptography}{Hype ou réél danger iminant~?}
+        \begin{footnotesize}
+            Exercice \execcounterdispinc{}, analyser l'article \href{https://www.earth.com/news/china-breaks-rsa-encryption-with-a-quantum-computer-threatening-global-data-security/}{China breaks RSA encryption with a quantum computer, threatening global data security}.
+            \bigbreak
+            RSA, peut-être simplifié comme suit~: $N$ est un semi-premier, c’est-à-dire que $p$ et $q$, ses facteurs, sont premiers.
+            $N$ est la clé publique, $p$ et $q$ sont secrets.
+            \begin{columns}
+
+                \column{0.6\textwidth}
+                \begin{itemize}
+                    \item Quelle est la clé (en supposant que c'est le semi-premier le plus grans possible pour cette taille de clé)~?
+                    \item Quels algorithmes peuvent trouver $p$ et $q$~?
+                    \item Développer ces algorithmes dans le langage de votre choix.
+                    Développer le plus facile sans I.A., il est très simple\ldots
+                    \item Combien de temps cela prendrait-il avec un ordinateur classique~?
+                \end{itemize}
+
+                \column{0.4\textwidth}
+                \begin{center}
+                    \includegraphics[width=6cm]{image/rsa-both-ways}
+                \end{center}
+
+            \end{columns}
+
+            \begin{itemize}
+                \item A-t-on la durée du programme sur l'ordinateur quantique~?
+                S’il est plus lent que l'ordinateur classique, il ne \textit{scalera} pas mieux.
+                \item Quels sentiments transmet cet article, sont-ils renforcés par les résultats précédents~?
+                \item Où en sont les ordinateurs classiques, ceux qui fonctionnent~?
+            \end{itemize}
+        \end{footnotesize}
+    \end{frame}
+
+    \begin{frame}{Logarithme discret}
+        \begin{columns}
+            \column{0.8\textwidth}
+            \begin{center}
+                \includegraphics[width=5cm]{image/dlog-both-ways}
+            \end{center}
+            \column{0.2\textwidth}
+            $p$ est premier.
+        \end{columns}
+        \begin{footnotesize}
+            Ce calcul, lui aussi déséquilibré est utilisé dans\footnote{Public key cryptography using discrete logarithms, \url{https://www.di-mgt.com.au/public-key-crypto-discrete-logs-0.html}}\footnotestep{}\footnote{EITCA, \url{https://fr.eitca.org/cybersecurity/eitc-is-acc-advanced-classical-cryptography/elliptic-curve-cryptography/introduction-to-elliptic-curves/examination-review-introduction-to-elliptic-curves/what-is-the-elliptic-curve-discrete-logarithm-problem-ecdlp-and-why-is-it-difficult-to-solve/}}~:
+            \begin{itemize}
+                \item Diffie-Hellman Key Exchange
+                \item MQV Key Agreement, proche de Diffie-Hellman
+                \item ElGamal Encryption
+                \item Digital Signature Algorithm (DSA)
+                \item ECDLP - Elliptic Curve Cryptography Discrete Logarithm Problem
+            \end{itemize}
+        \end{footnotesize}
+    \end{frame}
+
+    \begin{frame}{Logarithme classique vs.\ logarithme discret}
+        \footnotesize
+        \begin{columns}[T,totalwidth=\textwidth]
+            \begin{column}{0.5\textwidth}
+                \textbf{Logarithme classique (sur $\mathbb{R}$), permet de trouver $x$}.
+
+                \[
+                    h = g^{x} \;\Longrightarrow\; x = \log_{g}(h)
+                \]
+
+                \bigbreak
+                \textbf{Exemple~:}\,
+                $100 = 10^{2} \Rightarrow \log_{10}(100)=2$.
+
+                \bigbreak
+                \textbf{Caractéristiques~:}
+                \begin{itemize}
+                    \item Fonctions continues et inversibles
+                    \item Inverse efficace $\log_g$
+                    \item Travail sur les nombres réels
+                \end{itemize}
+            \end{column}
+
+            \begin{column}{0.5\textwidth}
+                \textbf{Logarithme discret (modulaire), où $p$ est premier.}
+
+                \[
+                    h \equiv g^{x} \pmod{p}
+                \]
+
+                \bigbreak
+                \textbf{Exemple~:}\,
+                $5^{6} \equiv 8 \pmod{23}$.\,
+                Ici $g=5$, $h=8$ ; on veut retrouver $x=6$.
+
+                \bigbreak
+                \textbf{Pourquoi c'est difficile~:}
+                \begin{itemize}
+                    \item Les exposants bouclent dans un groupe fini.
+                    Ils sont aussi périodiques.
+                    \item Pas de fonction inverse connue efficace en général
+                    \item Base de sécurité de Diffie-Hellman, ElGamal, ECC (ECDLP), DSA
+                \end{itemize}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{Post-quantum cryptography}{À risque ou pas~?}
+        \small
+        Exercice \execcounterdispinc{}~:
+        \begin{itemize}
+            \item Pour $p=23$ et $g=5$, calculer les puissances successives de $g$ modulo $p$ avec Python, que remarquez-vous~?
+            \item Quel lien avec le précédent article~?
+        \end{itemize}
+        \bigbreak
+        \begin{center}
+            \includegraphics[width=5cm]{image/quantum-computer}
+        \end{center}
+    \end{frame}
+
+    \begin{frame}{Post-quantum cryptography}{La multiplication scalaire à risque}
+
+        \begin{columns}
+            \column{0.5\textwidth}
+            La multiplication scalaire est utilisée dans la plupart des algorithmes de cryptographie à courbe elliptique (ECC).
+            \column{0.5\textwidth}
+            \begin{center}
+                \includegraphics[width=6cm]{image/secp256k1}
+            \end{center}
+        \end{columns}
+
+        \begin{itemize}
+            \item Ethereum et Bitcoin utilisent la courbe secp256k1.
+            \item ED25519 est une autre courbe très utilisée.
+            SSH, Monero, TLS, \textit{etc}.
+            \item X25519 est utilisée pour l'échange de clés dans le protocole TLS 1.3, WhatsApp, Signal, \textit{etc}.
+            \item \textit{Many more}
+        \end{itemize}
+
+        \bigbreak
+        \begin{dangercolorbox}
+            Cette dernière est périodique et est donc vulnérable aux attaques par l'algorithme de Shor.
+        \end{dangercolorbox}
+    \end{frame}
+
     \begin{frame}{Cryptography}{Cryptographie avec OpenSSL\footnote{Welcome to the OpenSSL project, \url{https://github.com/openssl/openssl}}}
         \begin{itemize}
             \item \textbf{OpenSSL}~: Bibliothèque robuste et un ensemble d'outils pour l'implémentation de la cryptographie en ligne de commande et API dans divers langages.
@@ -863,54 +1242,31 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQ8z4... chrichri@localhost" >> ~/.s
         \end{columns}
     \end{frame}
 
-
-    \section{MFA}\label{sec:mfa}
-
-    \begin{frame}{Authentification MultiFacteur (MAF)}
-        \begin{itemize}
-            \item La MAF renforce la sécurité en nécessitant plusieurs facteurs d'authentification.
-            \item Elle est souvent combinée avec des OTP (One-Time Passwords) pour ajouter une couche de protection supplémentaire.
-            \item Exemple~: 2FA (authentification à deux facteurs) où l'utilisateur fournit un mot de passe et un code temporaire, \textit{i.e.}, le OTP.
-            \item Le premier facteur est généralement quelque chose que l'utilisateur connait (mot de passe).
-            \item La 2FA peut s'intégrer à OAuth2 après l'étape de vérification du mot de passe.
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}{TOTP et HOTP}
-        \begin{itemize}
-            \item TOTP (Time-based One-Time Password)~: basé sur le temps, renouvelé périodiquement.
-            Toutes les 30 secondes par défaut pour Google Authenticator.
-            \item HOTP (HMAC-based OTP)~: basé sur un compteur incrémental.
-            \item TOTP est utilisé dans de nombreuses applications de sécurité car il est synchronisé avec l'horloge système, augmentant ainsi la sécurité.
-            \item HOTP est utilisé dans des applications où la synchronisation de l'horloge n'est pas possible.
-            \item Le device (smartphone, tablette) qui génère le mot de passe peut être offline.
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}{Exercice \execcounterdispinc sur TOTP}
-        Développer un serveur (sans base de données) d'authentification TOTP compatible avec l'application mobile Google Authenticator.
-        \bigbreak
-        \begin{columns}
-            \column{0.6\textwidth}
-            En Python, les librairies conseillées~:
+    \begin{frame}{Complément de solution sur les dernières versions d'Ubuntu\footnote{ask Ubuntu, Unable to disable password authentication over SSH, \url{https://askubuntu.com/questions/1440290/unable-to-disable-password-authentication-over-ssh}}}
+        \begin{dangercolorbox}
+            Si la solution précédente ne suffit pas, comme sur certaines versions récentes d'Ubuntu.
+            Désactiver le mot de passe dans la configuration ajoutée par Cloud Init.
+        \end{dangercolorbox}
+        \begin{footnotesize}
             \begin{itemize}
-                \item \href{https://pyauth.github.io/pyotp/}{PyOTP}
-                \item \href{https://pythonhosted.org/PyQRCode/}{PyQRCode}
-                \item \href{https://flask.palletsprojects.com/en/3.0.x/}{Flask}
+                \item Vérifier la présence de la directive d’inclusion~:
+                \begin{itemize}
+                    \item Ligne souvent présente dans \lstinline{/etc/ssh/sshd\_config}~:
+                    \lstinline{Include /etc/ssh/sshd\_config.d/*.conf}
+                \end{itemize}
+                \item Identifier le fichier chargé (souvent ajouté par cloud-init)~:
+                \lstinline{/etc/ssh/sshd\_config.d/50-cloud-init.conf}
+                \item Modifier ce fichier pour désactiver l’authentification par mot de passe~:
+                \begin{itemize}
+                    \item Remplacer ou commenter~:
+                    \lstinline{PasswordAuthentication yes} \\
+                    par \lstinline{\#PasswordAuthentication yes} ou \lstinline{PasswordAuthentication no}
+                \end{itemize}
+                \item Redémarrer le service SSH pour appliquer le changement~:
+                \\
+                \lstinline{sudo systemctl restart ssh} (ou \lstinline{sshd})
             \end{itemize}
-            Les livrables sont un diagramme de séquence UML qui contient~:
-            \begin{itemize}
-                \item Tous les échanges entre l'utilisateur et le serveur.
-                \item Les méthodes HTTP.
-                \item Les Content-Types des requêtes HTTP entrantes et sortantes.
-            \end{itemize}
-            \column{0.4\textwidth}
-            \begin{center}
-                \includegraphics[width=4cm]{image/totp-server.drawio}
-            \end{center}
-        \end{columns}
-        \bigbreak
-        Le serveur doit fonctionner avec l'application Google Authenticator.
+        \end{footnotesize}
     \end{frame}
 
 
